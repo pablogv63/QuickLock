@@ -3,4 +3,24 @@
     <string name="default_credential_name">Credential Name</string>
     <string name="default_last_used">2h ago</string>
     <string name="default_logo_description">App light icon</string>
+    <string name="biometric_title">One tap login</string>
+    <string name="biometric_desc">Use biometrics to access</string>
+    <string name="biometric_note">Accessing via biometrics is faster and safer. Your device has to have at least one biometric registered.</string>
+    <string name="biometric_success">Operation successful</string>
+    <string name="title_activity_biometric">BiometricActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="error_msg_biometric_not_setup">Biometrics not set up in your phone.</string>
+    <string name="error_msg_no_biometric_hardware">No biometric hardware in this phone.</string>
+    <string name="auth_title">Authenticate</string>
+    <string name="auth_subtitle">Authenticate using your preferred auth method</string>
+    <string name="auth_description">Sample Text</string>
+    <string name="error_msg_auth_error">Authentication Error</string>
+    <string name="error_msg_auth_failed">Authentication failed</string>
 </resources>
