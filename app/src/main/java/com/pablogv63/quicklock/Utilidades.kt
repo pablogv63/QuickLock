@@ -1,5 +1,6 @@
 package com.pablogv63.quicklock
 
+import java.lang.Math.abs
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -53,15 +54,15 @@ object Utilidades {
         //Se queda pendiente
 
         //Horas, minutos y segundos
-        singulares = arrayOf("segundo", "minuto", "hora")
-        plurales = arrayOf("segundos", "minutos", "horas")
-        for (i in 2 downTo 0) {
-            val now = now_split[1].split("-")[i].toInt()
-            val last: Int = last_split[1].split("-")[i].toInt()
+        singulares = arrayOf("hora", "minuto", "segundo")
+        plurales = arrayOf("horas", "minutos", "segundos")
+        for (i in 0..2) {
+            val now = now_split[1].split(":")[i].toInt()
+            val last: Int = last_split[1].split(":")[i].toInt()
             //Comprobar si es distinto
             if (now != last) {
                 var unidad = singulares[i]
-                val diff = now - last
+                val diff = abs(now - last)
                 if (diff > 1) unidad = plurales[i]
                 return "hace $diff $unidad"
             }

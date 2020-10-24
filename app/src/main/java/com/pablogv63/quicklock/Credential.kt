@@ -12,10 +12,10 @@ import java.util.*
  * name -> nombre personalizado
  * lastUsed -> fecha/hora de último uso
  */
-class Credential (val icon: String, val name: String){
+class Credential (val iconSrc: Int, val name: String){
 
     //Variable que almacena la fecha/hora de último uso
-    var lastUsed: String = Utilidades.getCurrentDateTimeEncoded()
+    var lastUsed: String = Utilidades.getCurrentDateTimeEncoded() //TODO(Tras leer poner manualmente)
         //Sobreescribimos el método get para que devuelva la diferencia de tiempos
         get() {return Utilidades.getDateTimeDiff(field)}
 

@@ -1,25 +1,42 @@
 package com.pablogv63.quicklock
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
+import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.activity_main.*
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import java.util.concurrent.Executor
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var contextApp: Context
+
+    private var layoutManager: RecyclerView.LayoutManager? = null
+    private var adapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        contextApp = this.applicationContext
+
+        //Decoración entre elementos
+        recyclerView_feed.addItemDecoration(DividerItemDecoration(contextApp, DividerItemDecoration.VERTICAL))
+
+        //Animación
+        val resId = R.anim.layout_animation_fall_down
+        val animation = AnimationUtils.loadLayoutAnimation(contextApp,resId)
+        recyclerView_feed.layoutAnimation = animation
 
         //Biometría
         val executor = ContextCompat.getMainExecutor(this)
@@ -43,6 +60,13 @@ class MainActivity : AppCompatActivity() {
         }
         //Llamada a listCredentials
         //listCredentials()
+
+        //__________________________________
+        layoutManager = LinearLayoutManager(this)
+        recyclerView_feed.layoutManager = layoutManager
+
+        adapter = RecyclerAdapter()
+        recyclerView_feed.adapter = adapter
     }
 
     /**
@@ -51,7 +75,7 @@ class MainActivity : AppCompatActivity() {
     private fun listCredentials(){
 
         //Primero sacamos el feed
-        var feed = findViewById<LinearLayout>(R.id.linearLayout_feed)
+        var feed = findViewById<RecyclerView>(R.id.recyclerView_feed)
 
         //Obtenemos el array de credenciales
         //Incompleto!
@@ -62,20 +86,18 @@ class MainActivity : AppCompatActivity() {
             val cardView = createCredentialCard(c)
             feed.addView(cardView)
         }
-
+        val a = 1
     }
 
     /**
      * Crea el elemento CardView de una credencial
      * cardView -> linearLayout(horizontal) -> elems
      */
-    private fun createCredentialCard(c: Credential): CardView{
-        val cardView = findViewById<CardView>(R.id.cardView_example)
-        var cardView_new = cardView
+    private fun createCredentialCard(c: Credential): View?{
+        //Instanciamos un cardView
+        var cardView = LayoutInflater.from(applicationContext).inflate(R.layout.credential_card,null)
 
-
-
-        var linearLayout = LinearLayout(applicationContext)
+        //Vamos especificando los valores
 
 
 
@@ -87,17 +109,17 @@ class MainActivity : AppCompatActivity() {
      * Obtiene el array de credenciales
      * PENDIENTE DE IMPLEMENTAR DESDE BD O ALGO
      */
-    private fun getCredentialArray(): Array<Credential> {
+    private fun getCredentialArray(): ArrayList<Credential> {
         //Implementación de ejemplo para testing
         var icon = R.drawable.ic_logo
         var name = "Credential Name"
-        var credentialArray = emptyArray<Credential>()
+        var credentialArray = ArrayList<Credential>()
         //Bucle para rellenar credenciales
         for (i in 0..5) {
             val iconText: String = icon.toString()
             val uniqueName = "$name $i"
-            val credential = Credential(iconText, uniqueName)
-            credentialArray[i] = credential
+            val credential = Credential(icon, uniqueName)
+            credentialArray.add(credential)
         }
 
         return credentialArray
