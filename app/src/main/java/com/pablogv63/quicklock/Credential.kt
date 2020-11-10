@@ -4,19 +4,83 @@ import com.pablogv63.quicklock.Utilidades
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Clase que representa a una credencial
  * Contiene:
- * icon -> ruta del icono
- * name -> nombre personalizado
- * lastUsed -> fecha/hora de último uso
+ * name -> nombre personalizado (Identificador)
+ * lastAccessed -> fecha/hora de últimos (10) accesos
+ * lastChanged -> fecha/hora de últimos (10) cambios
+ * label -> etiqueta
+ * campos -> otros campos
  */
-class Credential (val iconSrc: Int, val name: String){
+class Credential (var name: String, var category: String = "None"){
 
-    //Variable que almacena la fecha/hora de último uso
-    var lastUsed: String = Utilidades.getCurrentDateTimeEncoded() //TODO(Tras leer poner manualmente)
-        //Sobreescribimos el método get para que devuelva la diferencia de tiempos
-        get() {return Utilidades.getDateTimeDiff(field)}
+    //Variables
+    var lastViewed : String //Última vista
+    var lastChanged : String //Último cambio
 
+    init {
+        val currentTime = Utilidades.getCurrentDateTimeEncoded()
+        lastViewed = currentTime
+        lastChanged = currentTime
+        CredentialCategories.addOrUpdateCategory(category)
+    }
+
+    //Campos
+    var fields = ArrayList<CredentialField>()
+
+    //Constructor secundario: Leer desde archivo
+    constructor(name: String, category: String,
+                lastViewed: String, lastChanged: String,
+                fields: ArrayList<CredentialField>){
+        this.name = name
+        this.category = category
+        this.lastViewed = lastViewed
+        this.lastChanged = lastChanged
+    }
+
+    //Constructor residual con icono
+    constructor(icon: Int, name:String){
+        println("Bad constructor called")
+    }
+
+}
+
+/**
+ * Clase que representa a un campo de una credencial
+ */
+open class CredentialField(val name: String, var value: String){}
+
+class CredentialPassword(name: String = "password", value: String) : CredentialField(name, value) {
+
+    init {
+        //TODO: Manipulamos la contraseña para hashearla
+
+    }
+}
+
+/**
+ * Objeto que almacena las categorías
+ */
+object CredentialCategories {
+    //Diccionario de categorias
+    private val categories = mutableMapOf<String, Int>()
+
+    //Añadir o actualizar -> C, U
+    fun addOrUpdateCategory(key: String) {
+        val counter = categories[key]?:0
+        categories[key] = counter+1
+    }
+
+    //GET de todas-> R
+    fun getCategories(name: String): MutableMap<String,Int> {
+        return categories
+    }
+
+    //Borrar -> D
+    fun deleteCategory(name: String) {
+        categories.remove(name)
+    }
 }
