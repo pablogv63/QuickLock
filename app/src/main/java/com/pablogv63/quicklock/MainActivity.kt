@@ -18,6 +18,8 @@ import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.Executor
 
@@ -35,7 +37,6 @@ class MainActivity : AppCompatActivity() {
 
         //Decoración entre elementos
         recyclerView_feed.addItemDecoration(DividerItemDecoration(contextApp, DividerItemDecoration.VERTICAL))
-        //recyclerView_feed.visibility =
 
         //Animación -> No sé si dejarla o no, de momento se quita
         /*
@@ -43,25 +44,6 @@ class MainActivity : AppCompatActivity() {
         val animation = AnimationUtils.loadLayoutAnimation(contextApp,resId)
         recyclerView_feed.layoutAnimation = animation
         */
-
-        /*//Barra de navegación
-        topAppBar.setNavigationOnClickListener {
-            // Handle navigation icon press
-        }
-
-        topAppBar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.new_credential -> {
-                    // Handle favorite icon press
-                    true
-                }
-                R.id.search -> {
-                    // Handle search icon press
-                    true
-                }
-                else -> false
-            }
-        }*/
 
         //Visibilidad -> en DEBUG esta línea se queda quitada
         //recyclerView_feed.visibility = View.GONE
@@ -92,69 +74,6 @@ class MainActivity : AppCompatActivity() {
         //listCredentials()
     }
 
-    /**
-     * Lista las credenciales en el feed
-     */
-    private fun listCredentials(){
-
-        //Primero sacamos el feed
-        var feed = findViewById<LinearLayout>(R.id.linearLayout_feed)
-
-        //Obtenemos el array de credenciales
-        //Incompleto!
-        val credentialArray = getCredentialArray()
-
-        //Vamos insertando tarjetas en el feed
-        for (c in credentialArray) {
-            val cardView = createCredentialCard(c)
-            feed.addView(cardView)
-        }
-
-    }
-
-    /**
-     * Crea el elemento CardView de una credencial
-     * cardView -> linearLayout(horizontal) -> elems
-     */
-    private fun createCredentialCard(c: Credential): CardView{
-        val cardView = findViewById<CardView>(R.id.cardView_example)
-        var cardView_new = cardView
-
-
-
-        var linearLayout = LinearLayout(applicationContext)
-
-
-
-        return cardView
-    }
-
-
-    /**
-     * Obtiene el array de credenciales
-     * PENDIENTE DE IMPLEMENTAR DESDE BD O ALGO
-     */
-    private fun getCredentialArray(): Array<Credential> {
-        //Implementación de ejemplo para testing
-        var icon = R.drawable.ic_logo
-        var name = "Credential Name"
-        var credentialArray = emptyArray<Credential>()
-        //Bucle para rellenar credenciales
-        for (i in 0..5) {
-            val iconText: String = icon.toString()
-            val uniqueName = "$name $i"
-            val credential = Credential(iconText, uniqueName)
-            credentialArray[i] = credential
-
-        //__________________________________
-        layoutManager = LinearLayoutManager(this)
-        recyclerView_feed.layoutManager = layoutManager
-
-
-        adapter = RecyclerAdapter()
-        recyclerView_feed.adapter = adapter
-
-    }
 
     @Override
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -172,12 +91,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
         searchView.queryHint = getString(R.string.top_bar_search_hint)
-
-
-        /*val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        (menu.findItem(R.id.action_search).actionView as SearchView).apply {
-            setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        }*/
 
         return true
     }
