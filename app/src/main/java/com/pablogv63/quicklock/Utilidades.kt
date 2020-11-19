@@ -14,7 +14,7 @@ object Utilidades {
      */
     fun getCurrentDateTimeEncoded(): String {
         //Declaramos la variable resultado
-        var result: String = ""
+        var result: String
 
         //Obtenemos la fecha actual exacta
         val now = LocalDateTime.now()
@@ -25,13 +25,13 @@ object Utilidades {
     }
 
     /**
-     * Obtiene la diferencia entre la fecha/hora actual y la de last
+     * Obtiene la diferencia entre la fecha/hora actual (o de time) y la de last
      */
-    fun getDateTimeDiff(last: String): String {
+    fun getDateTimeDiff(last: String, time: String = getCurrentDateTimeEncoded()): String {
 
         //Aislamos la fecha actual y la anterior
         val last_split = last.split(" ")
-        val now_split = getCurrentDateTimeEncoded().split(" ")
+        val now_split = time.split(" ")
 
         //Comprobamos diferencias -> Debería de tirar de strings.xml
 

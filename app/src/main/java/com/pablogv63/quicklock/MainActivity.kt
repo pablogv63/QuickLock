@@ -1,14 +1,19 @@
 package com.pablogv63.quicklock
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.util.AttributeSet
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.app.SearchManager
+import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.cardview.widget.CardView
@@ -17,9 +22,49 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.Executor
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var contextApp: Context
+
+    private var layoutManager: RecyclerView.LayoutManager? = null
+    lateinit var adapter: RecyclerAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        contextApp = this.applicationContext
+
+        //Decoración entre elementos
+        recyclerView_feed.addItemDecoration(DividerItemDecoration(contextApp, DividerItemDecoration.VERTICAL))
+        //recyclerView_feed.visibility =
+
+        //Animación -> No sé si dejarla o no, de momento se quita
+        /*
+        val resId = R.anim.layout_animation_fall_down
+        val animation = AnimationUtils.loadLayoutAnimation(contextApp,resId)
+        recyclerView_feed.layoutAnimation = animation
+        */
+
+        /*//Barra de navegación
+        topAppBar.setNavigationOnClickListener {
+            // Handle navigation icon press
+        }
+
+        topAppBar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.new_credential -> {
+                    // Handle favorite icon press
+                    true
+                }
+                R.id.search -> {
+                    // Handle search icon press
+                    true
+                }
+                else -> false
+            }
+        }*/
+
+        //Visibilidad -> en DEBUG esta línea se queda quitada
+        //recyclerView_feed.visibility = View.GONE
 
         //Biometría
         val executor = ContextCompat.getMainExecutor(this)
@@ -41,6 +86,8 @@ class MainActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
         }
+
+
         //Llamada a listCredentials
         //listCredentials()
     }
@@ -98,10 +145,65 @@ class MainActivity : AppCompatActivity() {
             val uniqueName = "$name $i"
             val credential = Credential(iconText, uniqueName)
             credentialArray[i] = credential
-        }
 
-        return credentialArray
+        //__________________________________
+        layoutManager = LinearLayoutManager(this)
+        recyclerView_feed.layoutManager = layoutManager
+
+
+        adapter = RecyclerAdapter()
+        recyclerView_feed.adapter = adapter
+
     }
+
+    @Override
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.top_app_bar, menu)
+        //Búsqueda
+        val searchView = menu.findItem(R.id.action_search).actionView as SearchView
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter.filter(newText)
+                return false
+            }
+        })
+        searchView.queryHint = getString(R.string.top_bar_search_hint)
+
+
+        /*val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        (menu.findItem(R.id.action_search).actionView as SearchView).apply {
+            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        }*/
+
+        return true
+    }
+
+    @Override
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_search -> {
+                //Handle search
+                //TODO (Search in recyclerView)
+                Toast.makeText(this, "Search selected", Toast.LENGTH_SHORT)
+                    .show();
+                true
+            }
+            R.id.action_create -> {
+                //Handle new credential
+                //TODO (Go to create credential activity)
+                Toast.makeText(this, "New selected", Toast.LENGTH_SHORT)
+                    .show();
+                true
+            }
+            else -> false
+        }
+        return false
+    }
+
 
     /**
      * Autentica al usuario
@@ -130,12 +232,8 @@ class MainActivity : AppCompatActivity() {
                     super.onAuthenticationSucceeded(result)
                     //WHAT TO EXECUTE IF SUCCESS
 
-                    //main_layout.visibility = View.VISIBLE
-                    //Hago visible el feed
-                    //linearLayout_feed.visibility = View.VISIBLE
+                    recyclerView_feed.visibility = View.VISIBLE
 
-                    //Llamada a listCredentials
-                    //listCredentials()
                 }
                 // 3
                 @SuppressLint("StringFormatInvalid")
