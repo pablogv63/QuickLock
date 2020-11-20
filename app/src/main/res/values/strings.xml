@@ -27,7 +27,7 @@
     <string name="error_msg_no_biometric_hardware">No biometric hardware in this phone.</string>
     <string name="auth_title">Authenticate</string>
     <string name="auth_subtitle">Authenticate using your preferred auth method</string>
-    <string name="auth_description">Sample Text</string>
+    <string name="auth_description">You can either use your fingerprint or your password to access.</string>
     <string name="error_msg_auth_error">Authentication Error</string>
     <string name="error_msg_auth_failed">Authentication failed</string>
 </resources>
