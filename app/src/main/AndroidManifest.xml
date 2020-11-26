@@ -9,30 +9,34 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!-- Create Credential -->
+        <activity
+            android:name=".CreateActivity"
+            android:label="@string/top_bar_create"
+            android:parentActivityName=".MainActivity" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
-            <!--android:theme="@style/AppTheme.NoActionBar"-->
+
+            <!-- android:theme="@style/AppTheme.NoActionBar" -->
             <intent-filter>
-                <!--Establecemos la MainActivity como la Activity de inicio-->
+
+                <!-- Establecemos la MainActivity como la Activity de inicio -->
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <!--HAY QUE DECLARAR AQUÍ TODAS LAS ACTIVIDADES Y ESTABLECER SI PARTEN DE OTRA-->
-
-        <!--BiometricActivity-->
+        </activity> <!-- HAY QUE DECLARAR AQUÍ TODAS LAS ACTIVIDADES Y ESTABLECER SI PARTEN DE OTRA -->
+        <!-- BiometricActivity -->
         <activity
             android:name=".BiometricActivity"
             android:label="@string/title_activity_biometric"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value=".MainActivity" />
         </activity>
-        <!--/BiometricActivity-->
-
-
     </application>
 
 </manifest>

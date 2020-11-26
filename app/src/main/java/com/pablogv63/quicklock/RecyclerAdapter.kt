@@ -1,23 +1,20 @@
 package com.pablogv63.quicklock
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlin.coroutines.coroutineContext
 
 
-class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder> (), Filterable {
+class RecyclerAdapter (val context: Context): RecyclerView.Adapter<RecyclerAdapter.ViewHolder> (), Filterable {
 
-    private val credentialArray: ArrayList<Credential> = getCredentialArray() //TODO(Get credentials in a function)
-    private var credentialArrayFiltered: ArrayList<Credential> = credentialArray //Filtro
+    private val credentialArray: MutableList<Credential> = getCredentialArray() //TODO(Get credentials in a function)
+    private var credentialArrayFiltered: MutableList<Credential> = credentialArray //Filtro
     private var currentTime: String = Utilidades.getCurrentDateTimeEncoded()
 
     //Animation
@@ -51,7 +48,7 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder> (), Filt
         var credential = credentialArrayFiltered[position]
         holder.itemImage.setImageResource(R.drawable.ic_logo)
         holder.itemTitle.text = credential.name
-        holder.itemDetail.text = Utilidades.getDateTimeDiff(credential.lastViewed,currentTime)
+        holder.itemDetail.text = Utilidades.getDateTimeDiff(credential.lastViewed)
 
         //Animation
         /*
@@ -74,20 +71,20 @@ class RecyclerAdapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder> (), Filt
      * Obtiene el array de credenciales
      * TODO(PENDIENTE DE IMPLEMENTAR DESDE BD O ALGO)
      */
-    private fun getCredentialArray(): ArrayList<Credential> {
+    private fun getCredentialArray(): MutableList<Credential> {
         //Implementación de ejemplo para testing
-        var iconSrc = R.drawable.ic_logo
         var name = "Credential Name"
-        var credentialArray = ArrayList<Credential>()
+        val category = context.getString(R.string.no_category)
         //Bucle para rellenar credenciales
-        for (i in 0..15) {
-            //val iconText: String = icon.toString()
-            val uniqueName = "$name $i"
-            val credential = Credential(iconSrc, uniqueName)
-            credentialArray.add(credential)
+        if (Credentials.list.isEmpty()) {
+            for (i in 0..5) {
+                val uniqueName = "$name $i"
+                val credential = Credential(uniqueName, category)
+                Credentials.list.add(credential)
+            }
         }
 
-        return credentialArray
+        return Credentials.list
     }
 
 

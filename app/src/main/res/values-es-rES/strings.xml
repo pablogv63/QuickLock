@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QuickLock</string>
+    <string name="default_last_used">Hace 2h</string>
+    <string name="default_credential_name">Nombre</string>
+    <string name="biometric_title">Inicio en 1 clic</string>
+    <string name="biometric_desc">Usa la biometría para acceder</string>
+    <string name="biometric_note">Acceder con biometría es más rápido y seguro. Debes tener biometría configurada en tu dispositivo</string>
+    <string name="biometric_success">Auntenticado con éxito</string>
+    <string name="next">Siguiente</string>
+    <string name="previous">Anterior</string>
+    <string name="top_bar_create">Crear credencial</string>
+    <string name="top_bar_create_description">Crear una nueva credencial</string>
+    <string name="top_bar_search">Buscar</string>
+    <string name="top_bar_search_hint">Escribe algo...</string>
+    <string name="top_bar_search_description">Buscar</string>
+    <string name="error_msg_biometric_not_setup">Tu dispositivo admite biometría, pero no está configurada</string>
+    <string name="error_msg_no_biometric_hardware">Tu dispositivo no admite biometría</string>
+    <string name="auth_title">Autenticación</string>
+    <string name="auth_subtitle">Auntentícate usando el método que prefieras</string>
+    <string name="auth_description">Puedes usar biometría o tu contraseña para acceder</string>
+    <string name="error_msg_auth_error">Error en la autenticación</string>
+    <string name="error_msg_auth_failed">Fallo en la autenticación</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="invalid_username">Nombre de usuario no válido</string>
+    <string name="invalid_password">La contraseña debe tener al menos 5 caracteres</string>
+    <string name="prompt_name">Nombre</string>
+    <string name="prompt_category">Categoría</string>
+    <string name="prompt_email">Correo</string>
+    <string name="prompt_name_helper_text">Identifica a la credencial</string>
+    <string name="prompt_password_repeat">Repite tu contraseña</string>
+    <string name="invalid_password_duplicate">Debe ser igual</string>
+    <string name="no_category">Ninguna</string>
+    <string name="prompt_username">Nombre de usuario</string>
+    <string name="prompt_username_helper_text">Tu nombre de usuario</string>
+</resources>

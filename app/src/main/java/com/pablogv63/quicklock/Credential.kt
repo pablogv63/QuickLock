@@ -1,5 +1,7 @@
 package com.pablogv63.quicklock
 
+import android.content.res.Resources
+import androidx.core.content.res.ResourcesCompat
 import com.pablogv63.quicklock.Utilidades
 import java.security.MessageDigest
 import java.time.LocalDateTime
@@ -16,7 +18,7 @@ import kotlin.collections.ArrayList
  * label -> etiqueta
  * campos -> otros campos
  */
-class Credential (var name: String, var category: String = "None"){
+class Credential (var name: String, var category: String = "None", var fields: MutableList<CredentialField> = mutableListOf()){
 
     //Variables
     var lastViewed : String //Última vista
@@ -29,13 +31,10 @@ class Credential (var name: String, var category: String = "None"){
         CredentialCategories.addOrUpdateCategory(category)
     }
 
-    //Campos
-    var fields = ArrayList<CredentialField>()
-
     //Constructor secundario: Leer desde archivo
     constructor(name: String, category: String,
                 lastViewed: String, lastChanged: String,
-                fields: ArrayList<CredentialField>) : this(name,category) {
+                fields: MutableList<CredentialField>) : this(name,category) {
         this.lastViewed = lastViewed
         this.lastChanged = lastChanged
     }
@@ -48,10 +47,30 @@ class Credential (var name: String, var category: String = "None"){
 }
 
 /**
+ * Objeto que almacena todas las credenciales
+ */
+object Credentials {
+    val list = mutableListOf<Credential>()
+    init {
+        //TODO(Retrieve credentials from file
+    }
+
+    fun add(credential: Credential) {
+        list.add(credential)
+    }
+
+    enum class FieldNames {
+        PASSWORD,USERNAME,EMAIL
+    }
+
+}
+
+/**
  * Clase que representa a un campo de una credencial
  */
-open class CredentialField(val name: String, var value: String){}
+open class CredentialField(val id: Int, var value: String){}
 
+/*
 class CredentialPassword(name: String = "password", value: String) : CredentialField(name, value) {
 
     init {
@@ -67,7 +86,7 @@ class CredentialPassword(name: String = "password", value: String) : CredentialF
         val digest = md.digest(bytes)
         return digest.fold("", {str, it -> str + "%02x".format(it)})
     }
-}
+}*/
 
 /**
  * Objeto que almacena las categorías
@@ -83,8 +102,15 @@ object CredentialCategories {
     }
 
     //GET de todas-> R
-    fun getCategories(name: String): MutableMap<String,Int> {
+    fun getCategories(): MutableMap<String,Int> {
         return categories
+    }
+    fun getCategoriesAsText(): MutableList<String> {
+        var array = mutableListOf<String>()
+        categories.forEach() { entry: Map.Entry<String, Int> ->
+            array.add(entry.key + " (" + entry.value + ")")
+        }
+        return array
     }
 
     //Borrar -> D

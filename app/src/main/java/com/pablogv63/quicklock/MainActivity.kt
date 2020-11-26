@@ -9,12 +9,9 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import android.app.SearchManager
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.biometric.BiometricManager
@@ -72,9 +69,12 @@ class MainActivity : AppCompatActivity() {
                 ).show()
         }
 
+        //Adaptador de recyclerView
+        layoutManager = LinearLayoutManager(this)
+        recyclerView_feed.layoutManager = layoutManager
 
-        //Llamada a listCredentials
-        //listCredentials()
+        adapter = RecyclerAdapter(this)
+        recyclerView_feed.adapter = adapter
     }
 
 
@@ -110,9 +110,10 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_create -> {
                 //Handle new credential
-                //TODO (Go to create credential activity)
-                Toast.makeText(this, "New selected", Toast.LENGTH_SHORT)
-                    .show();
+                val intent = Intent(contextApp, CreateActivity::class.java).apply {
+                    //putExtra para mandar mensaje (esto puede servir para editar)
+                }
+                startActivity(intent)
                 true
             }
             else -> false

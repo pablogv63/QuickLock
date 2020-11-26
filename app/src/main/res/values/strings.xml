@@ -2,15 +2,15 @@
     <string name="app_name">QuickLock</string>
     <string name="default_credential_name">Credential Name</string>
     <string name="default_last_used">2h ago</string>
-    <string name="default_logo_description">App light icon</string>
+    <string name="default_logo_description" translatable="false">App light icon</string>
     <string name="biometric_title">One tap login</string>
     <string name="biometric_desc">Use biometrics to access</string>
     <string name="biometric_note">Accessing via biometrics is faster and safer. Your device has to have at least one biometric registered.</string>
     <string name="biometric_success">Operation successful</string>
-    <string name="title_activity_biometric">BiometricActivity</string>
+    <string name="title_activity_biometric" translatable="false">BiometricActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
+    <string name="first_fragment_label" translatable="false">First Fragment</string>
+    <string name="second_fragment_label" translatable="false">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
@@ -21,8 +21,8 @@
     <string name="top_bar_search_hint">Type name...</string>
     <string name="top_bar_search_description">Search</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="hello_first_fragment" translatable="false">Hello first fragment</string>
+    <string name="hello_second_fragment" translatable="false">Hello second fragment. Arg: %1$s</string>
     <string name="error_msg_biometric_not_setup">Biometrics not set up in your phone.</string>
     <string name="error_msg_no_biometric_hardware">No biometric hardware in this phone.</string>
     <string name="auth_title">Authenticate</string>
@@ -30,4 +30,21 @@
     <string name="auth_description">You can either use your fingerprint or your password to access.</string>
     <string name="error_msg_auth_error">Authentication Error</string>
     <string name="error_msg_auth_failed">Authentication failed</string>
+
+    <!-- Create Activity -->
+    <string name="title_activity_create" translatable="false">CreateActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="prompt_name">Name</string>
+    <string name="prompt_category">Category</string>
+    <string name="prompt_name_helper_text">Identifies the credential</string>
+    <string name="prompt_password_repeat">Repeat your password</string>
+    <string name="invalid_password_duplicate">Must be identical</string>
+    <string name="no_category">None</string>
+    <string name="prompt_username">Username</string>
+    <string name="prompt_username_helper_text">Your username</string>
+
+
 </resources>
