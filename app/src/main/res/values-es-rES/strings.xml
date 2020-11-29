@@ -33,4 +33,6 @@
     <string name="no_category">Ninguna</string>
     <string name="prompt_username">Nombre de usuario</string>
     <string name="prompt_username_helper_text">Tu nombre de usuario</string>
+    <string name="copied_password">Contraseña copiada</string>
+    <string name="copied_username">Nombre de usuario copiado</string>
 </resources>

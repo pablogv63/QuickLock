@@ -1,4 +1,4 @@
-package com.pablogv63.quicklock
+package com.pablogv63.quicklock.utilities
 
 import java.lang.Math.abs
 import java.time.LocalDateTime

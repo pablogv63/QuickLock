@@ -1,13 +1,6 @@
 package com.pablogv63.quicklock
 
-import android.content.res.Resources
-import androidx.core.content.res.ResourcesCompat
-import com.pablogv63.quicklock.Utilidades
-import java.security.MessageDigest
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.*
-import kotlin.collections.ArrayList
+import com.pablogv63.quicklock.utilities.Utilidades
 
 /**
  * Clase que representa a una credencial
@@ -23,6 +16,9 @@ class Credential (var name: String, var category: String = "None", var fields: M
     //Variables
     var lastViewed : String //Última vista
     var lastChanged : String //Último cambio
+
+    //Expandida en la lista
+    var expanded: Boolean = false
 
     init {
         val currentTime = Utilidades.getCurrentDateTimeEncoded()

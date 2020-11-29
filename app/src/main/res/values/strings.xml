@@ -45,6 +45,8 @@
     <string name="no_category">None</string>
     <string name="prompt_username">Username</string>
     <string name="prompt_username_helper_text">Your username</string>
+    <string name="copied_password">Password copied</string>
+    <string name="copied_username">Username copied</string>
 
 
 </resources>

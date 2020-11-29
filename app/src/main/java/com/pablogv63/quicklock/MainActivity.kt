@@ -2,17 +2,13 @@ package com.pablogv63.quicklock
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.animation.AnimationUtils
-import android.widget.LinearLayout
-import android.app.SearchManager
 import android.content.Intent
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
@@ -20,8 +16,10 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.util.concurrent.Executor
+import androidx.recyclerview.widget.SimpleItemAnimator
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.Executor
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,14 +34,16 @@ class MainActivity : AppCompatActivity() {
         contextApp = this.applicationContext
 
         //Decoración entre elementos
-        recyclerView_feed.addItemDecoration(DividerItemDecoration(contextApp, DividerItemDecoration.VERTICAL))
+        recyclerView_feed.addItemDecoration(
+            DividerItemDecoration(
+                contextApp,
+                DividerItemDecoration.VERTICAL
+            )
+        )
 
-        //Animación -> No sé si dejarla o no, de momento se quita
-        /*
-        val resId = R.anim.layout_animation_fall_down
-        val animation = AnimationUtils.loadLayoutAnimation(contextApp,resId)
-        recyclerView_feed.layoutAnimation = animation
-        */
+        //Animación (quita parpadeo)
+        (recyclerView_feed.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+
 
         //Visibilidad -> en DEBUG esta línea se queda quitada
         //recyclerView_feed.visibility = View.GONE
@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.top_app_bar, menu)
         //Búsqueda
         val searchView = menu.findItem(R.id.action_search).actionView as SearchView
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
@@ -152,6 +152,7 @@ class MainActivity : AppCompatActivity() {
                     recyclerView_feed.visibility = View.VISIBLE
 
                 }
+
                 // 3
                 @SuppressLint("StringFormatInvalid")
                 override fun onAuthenticationError(
@@ -164,10 +165,12 @@ class MainActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+
                 // 4
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
-                    Toast.makeText(applicationContext,
+                    Toast.makeText(
+                        applicationContext,
                         getString(R.string.error_msg_auth_failed),
                         Toast.LENGTH_SHORT
                     ).show()
