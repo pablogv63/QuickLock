@@ -6,14 +6,39 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity"
-    android:theme="@style/Theme.Design.Light.NoActionBar">
+    android:theme="@style/AppTheme">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_feed"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior = "@string/appbar_scrolling_view_behavior"
-        android:layoutAnimation="@anim/layout_animation_fall_down"/>
+        app:liftOnScroll="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/top_app_bar_main"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:title="@string/activity_main_title"
+            app:menu="@menu/top_app_bar_main_view"
+            app:navigationIcon="@drawable/ic_baseline_menu_24"
+            style="@style/ThemeOverlay.MaterialComponents.Toolbar.Primary"
+            />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior = "@string/appbar_scrolling_view_behavior">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_feed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layoutAnimation="@anim/layout_animation_fall_down"
+            tools:listitem="@layout/credential_card"/>
+
+    </androidx.core.widget.NestedScrollView>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

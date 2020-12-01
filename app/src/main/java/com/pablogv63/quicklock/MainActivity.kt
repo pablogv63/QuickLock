@@ -13,10 +13,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
+import androidx.recyclerview.widget.*
+import com.pablogv63.quicklock.utilities.SwipeCallback
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.Executor
 
@@ -32,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         contextApp = this.applicationContext
+        setSupportActionBar(findViewById(R.id.top_app_bar_main))
 
         //Decoración entre elementos
         recyclerView_feed.addItemDecoration(
@@ -70,17 +69,38 @@ class MainActivity : AppCompatActivity() {
         }
 
         //Adaptador de recyclerView
+        setUpRecyclerView()
+    }
+
+    private fun setUpRecyclerView() {
+        //Adaptador de recyclerView
         layoutManager = LinearLayoutManager(this)
         recyclerView_feed.layoutManager = layoutManager
 
         adapter = RecyclerAdapter(this)
         recyclerView_feed.adapter = adapter
+
+        val itemTouchHelper = ItemTouchHelper(SwipeCallback(adapter, context = contextApp))
+        itemTouchHelper.attachToRecyclerView(recyclerView_feed)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            0 -> {
+                //Llamada a AddCredential
+            }
+            1 -> {
+                //Llamada a EditActivity
+                adapter.notifyDataSetChanged()
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
 
     @Override
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.top_app_bar, menu)
+        menuInflater.inflate(R.menu.top_app_bar_main_view, menu)
         //Búsqueda
         val searchView = menu.findItem(R.id.action_search).actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

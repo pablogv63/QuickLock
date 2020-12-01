@@ -35,4 +35,10 @@
     <string name="prompt_username_helper_text">Tu nombre de usuario</string>
     <string name="copied_password">Contraseña copiada</string>
     <string name="copied_username">Nombre de usuario copiado</string>
+    <string name="activity_main_title">Credenciales</string>
+    <string name="activity_edit_title">Editar credencial</string>
+    <string name="top_bar_done_description">Terminar de editar</string>
+    <string name="top_bar_done">Hecho</string>
+    <string name="last_edited">"Última vez editado: "</string>
+    <string name="activity_create_title" translatable="false">Crear credencial</string>
 </resources>

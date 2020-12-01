@@ -2,9 +2,12 @@ package com.pablogv63.quicklock
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import androidx.core.view.isEmpty
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import kotlinx.android.synthetic.main.activity_create.*
@@ -16,27 +19,34 @@ class CreateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create)
-
-        //Button
-        buttonCreate.setOnClickListener { _ ->
-            if (checkInputs()){
-                saveCredential()
-                //TODO(Go to some activity)
-                finish() // Finaliza y vuelve a la actividad anterior
-            }
-        }
+        setSupportActionBar(findViewById(R.id.top_app_bar_create))
 
         //Prepare inputs call
         prepareInputs()
-        //IDEA: Poner el típico DONE en la barra en vez del botón //
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.top_app_bar_create,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.action_done_create -> {
+            if (checkAndSave()) {
+                setResult(RESULT_OK)
+                finish()
+            }
+            true
+        }
+        else -> false
     }
 
     private fun prepareInputs() {
         //Name
-        textFieldName.editText?.doOnTextChanged { text, start, before, count ->
-            //Respond to text change
-        }
+        /* Respond to text change
+        textFieldName.editText?.doOnTextChanged { text, start, before, count -> }
+        */
 
         //Password
         textFieldPassword.editText?.doAfterTextChanged { text ->
@@ -63,13 +73,15 @@ class CreateActivity : AppCompatActivity() {
         val items = CredentialCategories.getCategoriesAsText()
         val adapter = ArrayAdapter(this, R.layout.list_item, items)
         (textFieldCategory.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+        (textFieldCategory.editText as? AutoCompleteTextView)?.setText(items[0])
     }
 
     /**
      * Triggers when button is clicked
      * Gets all inputs, checks them and proceeds to save
+     * TODO(Check if empty or not valid)
      */
-    private fun checkInputs() : Boolean {
+    private fun checkAndSave() : Boolean {
         var fields = mutableListOf<CredentialField>()
 
         //Name
@@ -82,13 +94,6 @@ class CreateActivity : AppCompatActivity() {
         //Password
         val inputPassword = textFieldPassword.editText?.text.toString()
         fields.add(CredentialField(Credentials.FieldNames.PASSWORD.ordinal, inputPassword))
-        /*
-        Error in password field
-        //Set
-        textFieldPasswordDuplicate.error = getString(R.string.invalid_password)
-        //Clear
-        //textFieldPasswordDuplicate.error = null
-         */
 
         //Category
         val inputCategory = textFieldCategory.editText?.text.toString()
@@ -103,6 +108,8 @@ class CreateActivity : AppCompatActivity() {
      * Saves the credential
      */
     fun saveCredential() {
-
+        if (checkAndSave()){
+            //TODO(Save credential)
+        }
     }
 }

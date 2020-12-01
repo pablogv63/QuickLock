@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateActivity"
+    tools:context=".EditActivity"
     android:theme="@style/AppTheme">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -12,11 +12,12 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/top_app_bar_create"
+            android:id="@+id/top_app_bar_edit"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="@string/activity_create_title"
-            app:menu="@menu/top_app_bar_create"
+            app:title="@string/activity_edit_title"
+            app:menu="@menu/top_app_bar_edit"
+            style="@style/ThemeOverlay.MaterialComponents.Toolbar.Primary"
             />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -26,7 +27,6 @@
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -34,127 +34,108 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:orientation="vertical">
 
             <!-- Name -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textFieldName"
+                android:id="@+id/editTextFieldNameLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:hint="@string/prompt_name"
-
-                app:startIconDrawable="@drawable/ic_baseline_info_24"
-                app:startIconContentDescription="@string/prompt_name_helper_text"
                 app:endIconMode="clear_text"
+                app:startIconContentDescription="@string/prompt_name_helper_text"
 
-                app:helperTextEnabled="true"
-                app:helperText="@string/prompt_name_helper_text"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                app:startIconDrawable="@drawable/ic_baseline_info_24">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextFieldName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:inputType="textCapSentences"
-                    />
+                    android:inputType="textCapSentences" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Username -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textFieldUsername"
+                android:id="@+id/editTextFieldUsernameLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="@dimen/activity_vertical_margin"
+
                 android:hint="@string/prompt_username"
-
-                app:startIconDrawable="@drawable/ic_baseline_person_24"
-                app:startIconContentDescription="@string/prompt_username"
                 app:endIconMode="clear_text"
+                app:startIconContentDescription="@string/prompt_username"
 
-                app:helperTextEnabled="true"
-                app:helperText="@string/prompt_username_helper_text"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                app:startIconDrawable="@drawable/ic_baseline_person_24">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextFieldUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:inputType="text"
-                    />
+                    android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Password -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textFieldPassword"
+                android:id="@+id/editTextFieldPasswordLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="@dimen/activity_vertical_margin"
+
                 android:hint="@string/prompt_password"
-
-                app:startIconDrawable="@drawable/ic_baseline_lock_24"
-                app:startIconContentDescription="@string/prompt_password"
-
                 app:endIconMode="password_toggle"
+
                 app:errorEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                app:startIconContentDescription="@string/prompt_password"
+                app:startIconDrawable="@drawable/ic_baseline_lock_24">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextFieldPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:inputType="textPassword"
-                    />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- Repeat password -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textFieldPasswordDuplicate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_password_repeat"
-                android:visibility="visible"
-
-                app:startIconDrawable="@drawable/ic_baseline_lock_24"
-                app:startIconContentDescription="@string/prompt_password"
-
-                app:endIconMode="password_toggle"
-                app:errorEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-
-                    android:inputType="textPassword"
-                    />
+                    android:inputType="textPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Category -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textFieldCategory"
+                android:id="@+id/editTextFieldCategoryLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/prompt_category"
+                android:paddingTop="@dimen/activity_vertical_margin"
 
-                app:startIconDrawable="@drawable/ic_baseline_label_24"
                 app:startIconContentDescription="@string/prompt_category"
 
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                >
+                app:startIconDrawable="@drawable/ic_baseline_label_24">
 
                 <AutoCompleteTextView
+                    android:id="@+id/editTextFieldCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:hint="@string/prompt_category"
                     android:inputType="none" />
 
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Last edited -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textViewLastEdited"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/last_edited"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:gravity="center" />
+
 
         </LinearLayout>
 

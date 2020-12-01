@@ -1,14 +1,19 @@
 package com.pablogv63.quicklock
 
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.pablogv63.quicklock.utilities.Animations
 import com.pablogv63.quicklock.utilities.Utilidades
@@ -17,7 +22,7 @@ import com.pablogv63.quicklock.utilities.Utilidades
 class RecyclerAdapter(val context: Context): RecyclerView.Adapter<RecyclerAdapter.ViewHolder> (), Filterable {
 
     private val credentialArray: MutableList<Credential> = getCredentialArray() //TODO(Get credentials in a function)
-    private var credentialArrayFiltered: MutableList<Credential> = credentialArray //Filtro
+    var credentialArrayFiltered: MutableList<Credential> = credentialArray //Filtro
     private var currentTime: String = Utilidades.getCurrentDateTimeEncoded()
 
     //Animation
@@ -121,14 +126,12 @@ class RecyclerAdapter(val context: Context): RecyclerView.Adapter<RecyclerAdapte
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+        //Se llama solamente para colapsar el elemento en lastExpanded
         onBindViewHolder(holder,position)
-        //Hay algo expandido y no es el propio objeto
-        if (lastExpandedPos != -1 && position != lastExpandedPos) {
+        //Mirar si se le pide colapsarse (hay datos en payloads)
+        if (payloads.isNotEmpty()) {
             val credential = credentialArrayFiltered[position]
-            //Mirar si se le pide colapsarse (hay datos en payloads)
-            if (payloads.isNotEmpty()) {
-                collapseOrExpand(holder, credential)
-            }
+            collapseOrExpand(holder, credential)
         }
     }
 
@@ -141,9 +144,19 @@ class RecyclerAdapter(val context: Context): RecyclerView.Adapter<RecyclerAdapte
         //Expandir o colapsar
         holder.cardHeader.setOnClickListener { _ ->
             collapseOrExpand(holder,credential)
-            //Collapse previous
-            if (lastExpandedPos != -1) notifyItemChanged(lastExpandedPos, mutableListOf(true)) else notifyItemChanged(position)
-            lastExpandedPos = position
+            //Collapsar el anterior si no es el mismo
+            lastExpandedPos = if (lastExpandedPos != -1) {
+                //El anterior expandido es otro
+                if (lastExpandedPos != position) {
+                    notifyItemChanged(lastExpandedPos, listOf(position))
+                    position
+                } else { //El anterior expandido es el mismo
+                    -1
+                }
+            } else {
+                position
+            }
+            notifyItemChanged(position)
         }
 
         //Establecer el refresco
@@ -180,16 +193,26 @@ class RecyclerAdapter(val context: Context): RecyclerView.Adapter<RecyclerAdapte
         //Implementación de ejemplo para testing
         val name = context.getString(R.string.default_credential_name)
         val category = context.getString(R.string.no_category)
+        var fields = mutableListOf(
+            CredentialField(Credentials.FieldNames.USERNAME.ordinal,"username"),
+            CredentialField(Credentials.FieldNames.PASSWORD.ordinal,"12345678"))
         //Bucle para rellenar credenciales
-        if (Credentials.list.isEmpty()) {
-            for (i in 0..5) {
+        if (Credentials.getList().isEmpty()) {
+            for (i in 0..15) {
                 val uniqueName = "$name $i"
-                val credential = Credential(uniqueName, category)
-                Credentials.list.add(credential)
+                val credential = Credential(uniqueName, category, fields.toMutableList())
+                Credentials.add(credential)
             }
         }
 
-        return Credentials.list
+        return Credentials.getList()
+    }
+
+    /**
+     * Removes a credential from the list (and in general)
+     */
+    fun remove(position: Int){
+        //TODO("Not yet implemented")
     }
 
 
@@ -218,17 +241,37 @@ class RecyclerAdapter(val context: Context): RecyclerView.Adapter<RecyclerAdapte
                 }
                 val filterResults = FilterResults()
                 filterResults.values = credentialArrayFiltered
+                //Collapse all TODO(Make it work)
+                if (lastExpandedPos != -1) notifyItemChanged(lastExpandedPos, mutableListOf(true))
+                lastExpandedPos = -1
+
                 return filterResults
             }
 
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 credentialArrayFiltered = results?.values as ArrayList<Credential>
-                //Collapse all TODO(Make it work)
-                if (lastExpandedPos != -1) notifyItemChanged(lastExpandedPos, mutableListOf(true))
-                lastExpandedPos = -1
                 notifyDataSetChanged()
             }
         }
+    }
+
+    /**
+     * Gets the credential
+     */
+    fun getCredential(position: Int): Credential {
+        return credentialArrayFiltered[position]
+    }
+
+    fun getCredentialPosition(position: Int): Int {
+        return credentialArrayFiltered[position].positionInList
+    }
+
+    fun openEditActivity(positionInLayout: Int) {
+        val intent = Intent(context,EditActivity::class.java).apply {
+            putExtra("CREDENTIAL_POSITION", getCredentialPosition(positionInLayout))
+        }
+        ActivityCompat.startActivityForResult(context as Activity, intent, 1, null) //LLAMADA A EditActivity
+        notifyDataSetChanged()
     }
 }
