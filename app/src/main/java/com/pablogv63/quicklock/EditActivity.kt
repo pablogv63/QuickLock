@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Button
-import androidx.core.widget.doOnTextChanged
+import com.pablogv63.quicklock.credential.Credential
+import com.pablogv63.quicklock.credential.CredentialCategories
+import com.pablogv63.quicklock.credential.Credentials
 import kotlinx.android.synthetic.main.activity_edit.*
 
 class EditActivity : AppCompatActivity() {

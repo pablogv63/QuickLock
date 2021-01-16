@@ -7,9 +7,11 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import androidx.core.view.isEmpty
 import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
+import com.pablogv63.quicklock.credential.Credential
+import com.pablogv63.quicklock.credential.CredentialCategories
+import com.pablogv63.quicklock.credential.CredentialField
+import com.pablogv63.quicklock.credential.Credentials
 import kotlinx.android.synthetic.main.activity_create.*
 
 class CreateActivity : AppCompatActivity() {

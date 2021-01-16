@@ -12,18 +12,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.pablogv63.quicklock.credential.Credential
+import com.pablogv63.quicklock.credential.CredentialField
+import com.pablogv63.quicklock.credential.Credentials
 import com.pablogv63.quicklock.utilities.Animations
-import com.pablogv63.quicklock.utilities.Utilidades
+import com.pablogv63.quicklock.utilities.Utilities
 
 
 class RecyclerAdapter(val context: Context): RecyclerView.Adapter<RecyclerAdapter.ViewHolder> (), Filterable {
 
     private val credentialArray: MutableList<Credential> = getCredentialArray() //TODO(Get credentials in a function)
     var credentialArrayFiltered: MutableList<Credential> = credentialArray //Filtro
-    private var currentTime: String = Utilidades.getCurrentDateTimeEncoded()
+    private var currentTime: String = Utilities.getCurrentDateTimeEncoded()
 
     //Animation
     private var lastExpandedPos: Int = -1
@@ -88,7 +89,7 @@ class RecyclerAdapter(val context: Context): RecyclerView.Adapter<RecyclerAdapte
          */
         fun bind (credential: Credential) {
             title.text = credential.name
-            lastViewedDiff.text = Utilidades.getDateTimeDiff(credential.lastViewed)
+            lastViewedDiff.text = Utilities.getDateTimeDiff(credential.lastViewed)
             lastViewed = credential.lastViewed
 
             for (field in credential.fields) {
@@ -111,7 +112,7 @@ class RecyclerAdapter(val context: Context): RecyclerView.Adapter<RecyclerAdapte
 
             mainHandler.post(object: Runnable {
                 override fun run() {
-                    lastViewedDiff.text = Utilidades.getDateTimeDiff(lastViewed)
+                    lastViewedDiff.text = Utilities.getDateTimeDiff(lastViewed)
                     mainHandler.postDelayed(this, 1000)
                 }
             })
@@ -195,7 +196,8 @@ class RecyclerAdapter(val context: Context): RecyclerView.Adapter<RecyclerAdapte
         val category = context.getString(R.string.no_category)
         var fields = mutableListOf(
             CredentialField(Credentials.FieldNames.USERNAME.ordinal,"username"),
-            CredentialField(Credentials.FieldNames.PASSWORD.ordinal,"12345678"))
+            CredentialField(Credentials.FieldNames.PASSWORD.ordinal,"12345678")
+        )
         //Bucle para rellenar credenciales
         if (Credentials.getList().isEmpty()) {
             for (i in 0..15) {

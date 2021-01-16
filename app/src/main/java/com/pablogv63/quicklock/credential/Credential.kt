@@ -1,6 +1,6 @@
-package com.pablogv63.quicklock
+package com.pablogv63.quicklock.credential
 
-import com.pablogv63.quicklock.utilities.Utilidades
+import com.pablogv63.quicklock.utilities.Utilities
 
 /**
  * Clase que representa a una credencial
@@ -24,15 +24,15 @@ class Credential (var name: String, var category: String = "None", var fields: M
     var positionInList: Int = -1
 
     init {
-        val currentTime = Utilidades.getCurrentDateTimeEncoded()
+        val currentTime = Utilities.getCurrentDateTimeEncoded()
         lastViewed = currentTime
         lastChanged = currentTime
         CredentialCategories.addOrUpdateCategory(category)
     }
 
-    fun updateChanged(){lastChanged = Utilidades.getCurrentDateTimeEncoded()}
+    fun updateChanged(){lastChanged = Utilities.getCurrentDateTimeEncoded()}
 
-    fun updateViewed(){lastViewed = Utilidades.getCurrentDateTimeEncoded()}
+    fun updateViewed(){lastViewed = Utilities.getCurrentDateTimeEncoded()}
 
     //Constructor secundario: Leer desde archivo
     constructor(name: String, category: String,
@@ -50,63 +50,6 @@ class Credential (var name: String, var category: String = "None", var fields: M
 }
 
 /**
- * Objeto que almacena todas las credenciales
- */
-object Credentials {
-    private val list = mutableListOf<Credential>()
-    init {
-        //TODO(Retrieve credentials from file
-    }
-
-    fun add(credential: Credential) {
-        credential.positionInList = list.size
-        list.add(credential)
-    }
-
-    fun get(position: Int): Credential { return list[position] }
-
-    fun update(credential: Credential) { list[credential.positionInList] = credential }
-
-    fun getList( ): MutableList<Credential> {return list}
-
-    enum class FieldNames {
-        PASSWORD,USERNAME,EMAIL
-    }
-
-}
-
-/**
  * Clase que representa a un campo de una credencial
  */
 open class CredentialField(val id: Int, var value: String)
-
-/**
- * Objeto que almacena las categorías
- */
-object CredentialCategories {
-    //Diccionario de categorias
-    private val categories = mutableMapOf<String, Int>()
-
-    //Añadir o actualizar -> C, U
-    fun addOrUpdateCategory(key: String) {
-        val counter = categories[key]?:0
-        categories[key] = counter+1
-    }
-
-    //GET de todas-> R
-    fun getCategories(): MutableMap<String,Int> {
-        return categories
-    }
-    fun getCategoriesAsText(): MutableList<String> {
-        var array = mutableListOf<String>()
-        categories.forEach() { entry: Map.Entry<String, Int> ->
-            array.add(entry.key)
-        }
-        return array
-    }
-
-    //Borrar -> D
-    fun deleteCategory(name: String) {
-        categories.remove(name)
-    }
-}

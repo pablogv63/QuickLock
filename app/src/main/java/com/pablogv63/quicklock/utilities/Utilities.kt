@@ -4,7 +4,7 @@ import java.lang.Math.abs
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-object Utilidades {
+object Utilities {
 
     /*MANEJO DE FECHAS*/
     //Formato para las fechas
