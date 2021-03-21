@@ -14,16 +14,17 @@ import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.pablogv63.quicklock.credential.Credential
-import com.pablogv63.quicklock.credential.CredentialField
+import com.pablogv63.quicklock.credential.fields.CredentialFields
 import com.pablogv63.quicklock.credential.Credentials
+import com.pablogv63.quicklock.credential.fields.CredentialField
 import com.pablogv63.quicklock.utilities.Animations
 import com.pablogv63.quicklock.utilities.Utilities
 
 
 class RecyclerAdapter(val context: Context): RecyclerView.Adapter<RecyclerAdapter.ViewHolder> (), Filterable {
 
-    private val credentialArray: MutableList<Credential> = getCredentialArray() //TODO(Get credentials in a function)
-    var credentialArrayFiltered: MutableList<Credential> = credentialArray //Filtro
+    private val credentialList: MutableList<Credential> = getCredentialList()
+    var credentialArrayFiltered: MutableList<Credential> = credentialList //Filtro
     private var currentTime: String = Utilities.getCurrentDateTimeEncoded()
 
     //Animation
@@ -92,14 +93,15 @@ class RecyclerAdapter(val context: Context): RecyclerView.Adapter<RecyclerAdapte
             lastViewedDiff.text = Utilities.getDateTimeDiff(credential.lastViewed)
             lastViewed = credential.lastViewed
 
-            for (field in credential.fields) {
+            for (field in credential.fields.getCredentialFields()) {
                 when (field.id) {
-                    Credentials.FieldNames.USERNAME.ordinal -> {
+                    CredentialFields.FieldType.USERNAME -> {
                         username.text = field.value
                     }
-                    Credentials.FieldNames.PASSWORD.ordinal -> {
+                    CredentialFields.FieldType.PASSWORD -> {
                         password.text = field.value
                     }
+                    else -> {}
                 }
             }
         }
@@ -194,20 +196,27 @@ class RecyclerAdapter(val context: Context): RecyclerView.Adapter<RecyclerAdapte
         //Implementación de ejemplo para testing
         val name = context.getString(R.string.default_credential_name)
         val category = context.getString(R.string.no_category)
-        var fields = mutableListOf(
-            CredentialField(Credentials.FieldNames.USERNAME.ordinal,"username"),
-            CredentialField(Credentials.FieldNames.PASSWORD.ordinal,"12345678")
-        )
+        val fields = CredentialFields()
+        fields.add(CredentialField(CredentialFields.FieldType.USERNAME,"username"))
+        fields.add(CredentialField(CredentialFields.FieldType.PASSWORD,"12345678"))
         //Bucle para rellenar credenciales
-        if (Credentials.getList().isEmpty()) {
+        val list = Credentials.getList(context)
+        if (list.isEmpty()) {
             for (i in 0..15) {
                 val uniqueName = "$name $i"
-                val credential = Credential(uniqueName, category, fields.toMutableList())
+                val credential = Credential(uniqueName, category, fields)
                 Credentials.add(credential)
             }
         }
 
-        return Credentials.getList()
+        return list
+    }
+
+    /**
+     * Obtiene el array de credenciales desde donde toca
+     */
+    private fun getCredentialList(): MutableList<Credential> {
+        return Credentials.getList(context)
     }
 
     /**
@@ -230,16 +239,16 @@ class RecyclerAdapter(val context: Context): RecyclerView.Adapter<RecyclerAdapte
         return object : Filter () {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val charSearch = constraint.toString()
-                if (charSearch.isEmpty()) {
-                    credentialArrayFiltered = credentialArray
+                credentialArrayFiltered = if (charSearch.isEmpty()) {
+                    credentialList
                 } else {
                     val resultList = ArrayList<Credential> ()
-                    for (cred in credentialArray) {
+                    for (cred in credentialList) {
                         if (cred.name.toLowerCase().contains(charSearch.toLowerCase())){
                             resultList.add(cred)
                         }
                     }
-                    credentialArrayFiltered = resultList
+                    resultList
                 }
                 val filterResults = FilterResults()
                 filterResults.values = credentialArrayFiltered
@@ -265,7 +274,7 @@ class RecyclerAdapter(val context: Context): RecyclerView.Adapter<RecyclerAdapte
         return credentialArrayFiltered[position]
     }
 
-    fun getCredentialPosition(position: Int): Int {
+    private fun getCredentialPosition(position: Int): Int {
         return credentialArrayFiltered[position].positionInList
     }
 

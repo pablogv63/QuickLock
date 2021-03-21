@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import com.pablogv63.quicklock.credential.Credential
 import com.pablogv63.quicklock.credential.CredentialCategories
 import com.pablogv63.quicklock.credential.Credentials
+import com.pablogv63.quicklock.credential.fields.CredentialFields
 import kotlinx.android.synthetic.main.activity_edit.*
 
 class EditActivity : AppCompatActivity() {
@@ -62,10 +63,11 @@ class EditActivity : AppCompatActivity() {
         editTextFieldCategory.inputType = InputType.TYPE_NULL
 
         //Fields
-        for (field in credential.fields) {
+        for (field in credential.fields.getCredentialFields()) {
             when (field.id) {
-                Credentials.FieldNames.USERNAME.ordinal -> editTextFieldUsername.setText(field.value)
-                Credentials.FieldNames.PASSWORD.ordinal -> editTextFieldPassword.setText(field.value)
+                CredentialFields.FieldType.USERNAME -> editTextFieldUsername.setText(field.value)
+                CredentialFields.FieldType.PASSWORD -> editTextFieldPassword.setText(field.value)
+                else -> {}
             }
         }
 
@@ -80,10 +82,11 @@ class EditActivity : AppCompatActivity() {
         //Category
         credential.category = editTextFieldCategory.text.toString()
         //Fields
-        for (field in credential.fields) {
+        for (field in credential.fields.getCredentialFields()) {
             when (field.id) {
-                Credentials.FieldNames.USERNAME.ordinal -> field.value = editTextFieldUsername.text.toString()
-                Credentials.FieldNames.PASSWORD.ordinal -> field.value = editTextFieldPassword.text.toString()
+                CredentialFields.FieldType.USERNAME -> field.value = editTextFieldUsername.text.toString()
+                CredentialFields.FieldType.PASSWORD -> field.value = editTextFieldPassword.text.toString()
+                else -> {}
             }
         }
         //Update lastChanged

@@ -15,7 +15,7 @@ object Utilities {
      */
     fun getCurrentDateTimeEncoded(): String {
         //Declaramos la variable resultado
-        var result: String
+        val result: String
 
         //Obtenemos la fecha actual exacta
         val now = LocalDateTime.now()

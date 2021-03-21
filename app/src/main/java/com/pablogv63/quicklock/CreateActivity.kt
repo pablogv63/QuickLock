@@ -1,5 +1,6 @@
 package com.pablogv63.quicklock
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -10,13 +11,16 @@ import android.widget.AutoCompleteTextView
 import androidx.core.widget.doAfterTextChanged
 import com.pablogv63.quicklock.credential.Credential
 import com.pablogv63.quicklock.credential.CredentialCategories
-import com.pablogv63.quicklock.credential.CredentialField
 import com.pablogv63.quicklock.credential.Credentials
+import com.pablogv63.quicklock.credential.fields.CredentialField
+import com.pablogv63.quicklock.credential.fields.CredentialFields
 import kotlinx.android.synthetic.main.activity_create.*
 
 class CreateActivity : AppCompatActivity() {
 
     lateinit var passwordText : String
+
+    val context: Context = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,34 +88,26 @@ class CreateActivity : AppCompatActivity() {
      * TODO(Check if empty or not valid)
      */
     private fun checkAndSave() : Boolean {
-        var fields = mutableListOf<CredentialField>()
+        val fields = CredentialFields()
 
         //Name
         val inputName = textFieldName.editText?.text.toString()
 
         //Username
         val inputUsername = textFieldUsername.editText?.text.toString()
-        fields.add(CredentialField(Credentials.FieldNames.USERNAME.ordinal, inputUsername))
+        fields.add(CredentialField(CredentialFields.FieldType.USERNAME, inputUsername))
 
         //Password
         val inputPassword = textFieldPassword.editText?.text.toString()
-        fields.add(CredentialField(Credentials.FieldNames.PASSWORD.ordinal, inputPassword))
+        fields.add(CredentialField(CredentialFields.FieldType.PASSWORD, inputPassword))
 
         //Category
         val inputCategory = textFieldCategory.editText?.text.toString()
 
         //End: If everything goes alright add to credential array
-        var credential = Credential(inputName,inputCategory, fields)
+        val credential = Credential(inputName,inputCategory, fields)
         Credentials.add(credential)
+        Credentials.save(context)
         return true
-    }
-
-    /**
-     * Saves the credential
-     */
-    fun saveCredential() {
-        if (checkAndSave()){
-            //TODO(Save credential)
-        }
     }
 }
