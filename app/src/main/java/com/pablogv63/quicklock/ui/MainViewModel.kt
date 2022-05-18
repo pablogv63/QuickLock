@@ -23,15 +23,47 @@ class MainViewModel(
     private var getExamplePeopleJob: Job? = null
 
     init {
-        getExamplePeople()
+        addCreds() //TODO: Remove this line and assoc function
+    }
+
+    private fun addCreds(){
+        val cred1 = Credential(
+            credentialId = 1,
+            name = "Cred1 and some other stuff",
+            username = "cred1@mail.com",
+            password = "********",
+            lastAccess = LocalDate.of(2022,5,15),
+            lastModified = LocalDate.of(2022,5,10)
+        )
+        val cred2 = Credential(
+            credentialId = 2,
+            name = "Cred2",
+            username = "cred2@mail.com",
+            password = "********",
+            lastAccess = LocalDate.of(2022,5,15),
+            lastModified = LocalDate.of(2022,5,10)
+        )
+        val cred3 = Credential(
+            credentialId = 3,
+            name = "Cred3",
+            username = "cred3@mail.com",
+            password = "********",
+            lastAccess = LocalDate.of(2022,5,15),
+            lastModified = LocalDate.of(2022,5,10)
+        )
+        viewModelScope.launch(Dispatchers.IO) {
+            credentialUseCases.addCredential(cred1)
+            credentialUseCases.addCredential(cred2)
+            credentialUseCases.addCredential(cred3)
+        }
     }
 
     private fun getExamplePeople(){
         getExamplePeopleJob?.cancel()
-        getExamplePeopleJob = credentialUseCases.getCredentials()
+        getExamplePeopleJob = credentialUseCases.getCredentialsWithCategories()
             .onEach { examplePeople ->
                 _state.value = state.value.copy(
-                    examplePeople = examplePeople
+                    examplePeople = emptyList()
                 )
             }
             .launchIn(viewModelScope)
