@@ -15,9 +15,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.pablogv63.quicklock.ui.credentials.CredentialsScreen
 import com.pablogv63.quicklock.ui.theme.QuickLockTheme
+import org.koin.androidx.compose.getViewModel
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -26,7 +29,8 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    MainScreen()
+                    val mainViewModel: MainViewModel = getViewModel()
+                    CredentialsScreen(viewModel = getViewModel())
                 }
             }
         }

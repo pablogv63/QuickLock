@@ -58,6 +58,9 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 
+    /* Extended material icons */
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+
     /* Koin dependencies */
     implementation "io.insert-koin:koin-android:$koin_version"
     implementation "io.insert-koin:koin-androidx-navigation:$koin_version"

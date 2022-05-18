@@ -7,8 +7,9 @@ import com.pablogv63.quicklock.data.repository.CredentialRepositoryImpl
 import com.pablogv63.quicklock.domain.repository.CredentialRepository
 import com.pablogv63.quicklock.domain.use_case.AddCredential
 import com.pablogv63.quicklock.domain.use_case.CredentialUseCases
-import com.pablogv63.quicklock.domain.use_case.GetCredentials
+import com.pablogv63.quicklock.domain.use_case.GetCredentialsWithCategories
 import com.pablogv63.quicklock.ui.MainViewModel
+import com.pablogv63.quicklock.ui.credentials.CredentialsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -28,11 +29,14 @@ val appModule = module {
     }
     single<CredentialUseCases> {
         CredentialUseCases(
-            GetCredentials(get()),
+            GetCredentialsWithCategories(get()),
             AddCredential(get())
         )
     }
-    viewModel {
+    viewModel<MainViewModel> {
         MainViewModel(get())
+    }
+    viewModel<CredentialsViewModel> {
+        CredentialsViewModel(get())
     }
 }

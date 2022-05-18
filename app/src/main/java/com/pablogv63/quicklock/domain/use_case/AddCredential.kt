@@ -7,6 +7,6 @@ class AddCredential(
     private val repository: CredentialRepository
 ) {
     suspend operator fun invoke(credential: Credential){
-        repository.insertExamplePerson(credential)
+        repository.insertCredential(credential)
     }
 }
