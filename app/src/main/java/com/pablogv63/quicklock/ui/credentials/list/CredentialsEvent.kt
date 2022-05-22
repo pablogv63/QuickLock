@@ -1,4 +1,4 @@
-package com.pablogv63.quicklock.ui.credentials
+package com.pablogv63.quicklock.ui.credentials.list
 
 import com.pablogv63.quicklock.domain.util.CredentialOrder
 

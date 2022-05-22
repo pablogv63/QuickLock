@@ -1,4 +1,4 @@
-package com.pablogv63.quicklock.data.data_source.credential_category_pair
+package com.pablogv63.quicklock.domain.model
 
 import androidx.room.Embedded
 import androidx.room.Junction

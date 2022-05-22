@@ -13,7 +13,7 @@ import com.pablogv63.quicklock.domain.model.Credential
 
 @Database(
     entities = [Credential::class, Category::class, CredentialCategoryPair::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(CredentialConverters::class)

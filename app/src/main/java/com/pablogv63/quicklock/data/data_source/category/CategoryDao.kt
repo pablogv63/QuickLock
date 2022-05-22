@@ -14,11 +14,11 @@ interface CategoryDao {
     fun getCategoryById(id: Int): Flow<Category>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCategory(category: Category)
+    fun insertCategory(category: Category): Long
 
     @Delete
-    fun deleteCategory(category: Category)
+    fun deleteCategory(category: Category): Int
 
     @Update
-    fun updateCategory(category: Category)
+    fun updateCategory(category: Category): Int
 }

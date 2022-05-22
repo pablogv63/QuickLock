@@ -1,5 +1,7 @@
 package com.pablogv63.quicklock.ui
 
+import android.content.ClipData
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,8 +16,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.tooling.preview.Preview
-import com.pablogv63.quicklock.ui.credentials.CredentialsScreen
+import androidx.core.content.getSystemService
+import com.pablogv63.quicklock.ui.credentials.list.CredentialsScreen
+import com.pablogv63.quicklock.ui.navigation.QuickLockNavHost
 import com.pablogv63.quicklock.ui.theme.QuickLockTheme
 import org.koin.androidx.compose.getViewModel
 
@@ -30,7 +35,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     val mainViewModel: MainViewModel = getViewModel()
-                    CredentialsScreen(viewModel = getViewModel())
+                    QuickLockNavHost()
                 }
             }
         }

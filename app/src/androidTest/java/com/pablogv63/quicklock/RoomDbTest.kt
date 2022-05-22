@@ -8,7 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.pablogv63.quicklock.data.data_source.AppDatabase
 import com.pablogv63.quicklock.data.data_source.category.CategoryDao
 import com.pablogv63.quicklock.data.data_source.credential.CredentialDao
-import com.pablogv63.quicklock.data.data_source.credential_category_pair.CredentialWithCategoryList
+import com.pablogv63.quicklock.domain.model.CredentialWithCategoryList
 import com.pablogv63.quicklock.data.data_source.credential_category_pair.CredentialCategoryPairDao
 import com.pablogv63.quicklock.domain.model.CredentialCategoryPair
 import kotlinx.coroutines.flow.first

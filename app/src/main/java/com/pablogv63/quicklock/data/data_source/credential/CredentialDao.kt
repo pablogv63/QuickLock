@@ -1,7 +1,7 @@
 package com.pablogv63.quicklock.data.data_source.credential
 
 import androidx.room.*
-import com.pablogv63.quicklock.data.data_source.credential_category_pair.CredentialWithCategoryList
+import com.pablogv63.quicklock.domain.model.CredentialWithCategoryList
 import com.pablogv63.quicklock.domain.model.Credential
 import kotlinx.coroutines.flow.Flow
 
@@ -25,11 +25,11 @@ interface CredentialDao {
 
     // If exists, behaves the same as update
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(credential: Credential)
+    fun insert(credential: Credential): Long
 
     @Delete
-    fun delete(credential: Credential)
+    fun delete(credential: Credential): Int
 
     @Update
-    fun update(credential: Credential)
+    fun update(credential: Credential): Int
 }

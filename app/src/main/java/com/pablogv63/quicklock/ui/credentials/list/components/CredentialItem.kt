@@ -1,28 +1,21 @@
-package com.pablogv63.quicklock.ui.credentials.components
+package com.pablogv63.quicklock.ui.credentials.list.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.ContentCopy
-import androidx.compose.material.icons.outlined.CopyAll
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.FileCopy
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.pablogv63.quicklock.data.data_source.credential_category_pair.CredentialWithCategoryList
+import com.pablogv63.quicklock.domain.model.CredentialWithCategoryList
 
 data class CredentialItemValues(
     val roundedIcon: RoundedIcon,
@@ -52,7 +45,7 @@ fun CredentialItem(
     val firstCategory = categoryList.firstOrNull()
     val roundedIconColor = if (firstCategory != null)
         Color(firstCategory.colour)
-    else Color(80,166,66)
+    else MaterialTheme.colorScheme.primary
 
     val credentialItemValues = CredentialItemValues(
         roundedIcon = CredentialItemValues.RoundedIcon("C", roundedIconColor),
@@ -70,7 +63,6 @@ fun CredentialItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CredentialItemContent(credentialItemValues: CredentialItemValues){
-    // Card with stuff
     OutlinedCard (
         modifier = Modifier
             .fillMaxWidth(),
@@ -78,7 +70,7 @@ fun CredentialItemContent(credentialItemValues: CredentialItemValues){
     ){
         Column (
             modifier = Modifier
-                .padding(vertical = 12.dp, horizontal = 16.dp)
+                .padding(vertical = 12.dp, horizontal = 14.dp)
         ){
             // First row
             Row (
@@ -87,7 +79,10 @@ fun CredentialItemContent(credentialItemValues: CredentialItemValues){
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Rounded icon
-                RoundedIconWithText(text = "C", backgroundColor = credentialItemValues.roundedIcon.color)
+                RoundedIconWithText(
+                    text = credentialItemValues.name.first().toString(),
+                    backgroundColor = credentialItemValues.roundedIcon.color
+                )
                 Spacer(modifier = Modifier.width(16.dp))
                 // Cred name and main field
                 Column {
@@ -113,8 +108,8 @@ fun CredentialItemContent(credentialItemValues: CredentialItemValues){
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                CopyButton(text = "Copy username", credentialItemValues.onCopyUsernameClick)
-                Spacer(modifier = Modifier.width(8.dp))
+                CopyButton(text = "Copy Username", credentialItemValues.onCopyUsernameClick)
+                Spacer(modifier = Modifier.width(4.dp))
                 CopyButton(text = "Copy password", credentialItemValues.onCopyPasswordClick)
             }
         }
@@ -145,6 +140,7 @@ fun RoundedIconWithText(text: String, backgroundColor: Color) {
 
         Text(
             text = text,
+            style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center,
             color = Color.White,
             modifier = Modifier
@@ -175,8 +171,13 @@ fun CopyButton(
     onItemClick: () -> Unit
 ){
     OutlinedButton(onClick = onItemClick) {
-        Icon(imageVector = Icons.Outlined.ContentCopy, contentDescription = "Copy")
-        Spacer(modifier = Modifier.width(8.dp))
+        Icon(
+            imageVector = Icons.Outlined.ContentCopy,
+            contentDescription = text,
+            modifier = Modifier
+                .width(16.dp)
+        )
+        Spacer(modifier = Modifier.width(4.dp))
         Text(text = text)
     }
 }
@@ -185,7 +186,9 @@ fun CopyButton(
 @Composable
 fun PreviewCredentialItem() {
     val credentialItemValues = CredentialItemValues(
-        roundedIcon = CredentialItemValues.RoundedIcon("C", Color(80,166,66)),
+        roundedIcon = CredentialItemValues.RoundedIcon(
+            text = "C",
+            color = Color(80,166,66)),
         name = "Credential with a large name",
         username = "cred1@mail.com",
         onCardClick = {},
@@ -193,7 +196,7 @@ fun PreviewCredentialItem() {
         onCopyPasswordClick = {},
         onEditButtonClick = {}
     )
-    CredentialItemContent(credentialItemValues = credentialItemValues)
+    CredentialItemContent(credentialItemValues)
 }
 
 @Preview
