@@ -8,8 +8,9 @@ interface CredentialRepository {
 
     fun getCredentials(): Flow<List<Credential>>
     fun getCredentialsWithCategories(): Flow<List<CredentialWithCategoryList>>
-    suspend fun getCredentialById(id: Int): Flow<Credential>
+    fun getCredentialById(id: Int): Flow<Credential>
     suspend fun insertAll(credentialList: List<Credential>)
     suspend fun insertCredential(credential: Credential): Long
     suspend fun deleteCredential(credential: Credential)
+    suspend fun deleteCredentialFromId(credentialId: Int)
 }

@@ -20,4 +20,8 @@ interface CredentialCategoryPairDao {
     @Transaction
     @Query("Select * From credential")
     fun getCredentialsWithCategories(): Flow<List<CredentialWithCategoryList>>
+
+    @Transaction
+    @Query("Select * From credential where credentialId=:credentialId")
+    fun getCredentialWithCategoriesFromId(credentialId: Int): Flow<CredentialWithCategoryList>
 }

@@ -19,12 +19,14 @@ class CredentialRepositoryImpl(
         return dao.getAllWithCategories()
     }
 
-    override suspend fun getCredentialById(id: Int): Flow<Credential> {
+    override fun getCredentialById(id: Int): Flow<Credential> {
         return dao.findById(id)
     }
 
     override suspend fun insertAll(credentialList: List<Credential>) {
-        credentialList.map { dao.insert(it) }
+        withContext(Dispatchers.IO){
+            credentialList.map { dao.insert(it) }
+        }
     }
 
     override suspend fun insertCredential(credential: Credential): Long {
@@ -33,6 +35,10 @@ class CredentialRepositoryImpl(
 
     override suspend fun deleteCredential(credential: Credential) {
         withContext(Dispatchers.IO) { dao.delete(credential) }
+    }
+
+    override suspend fun deleteCredentialFromId(credentialId: Int) {
+        withContext(Dispatchers.IO) { dao.delete(credentialId = credentialId) }
     }
 
 }

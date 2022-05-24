@@ -1,4 +1,4 @@
-package com.pablogv63.quicklock.ui.credentials.add.components
+package com.pablogv63.quicklock.ui.credentials.form.components
 
 import android.app.DatePickerDialog
 import android.content.Context

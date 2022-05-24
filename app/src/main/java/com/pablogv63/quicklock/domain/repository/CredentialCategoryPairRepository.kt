@@ -6,8 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface CredentialCategoryPairRepository {
 
-    suspend fun getAll(): Flow<List<CredentialCategoryPair>>
-    suspend fun getCredentialsWithCategories(): Flow<List<CredentialWithCategoryList>>
+    fun getAll(): Flow<List<CredentialCategoryPair>>
+    fun getCredentialsWithCategories(): Flow<List<CredentialWithCategoryList>>
+    fun getCredentialWithCategoriesFromId(credentialId: Int): Flow<CredentialWithCategoryList>
     suspend fun insertAll(credentialCategoryPairs: List<CredentialCategoryPair>)
     suspend fun insertCredentialCategoryPair(credentialCategoryPair: CredentialCategoryPair)
     suspend fun deleteCredentialCategoryPair(credentialCategoryPair: CredentialCategoryPair)

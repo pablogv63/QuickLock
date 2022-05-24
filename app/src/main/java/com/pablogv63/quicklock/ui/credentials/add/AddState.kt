@@ -2,7 +2,7 @@ package com.pablogv63.quicklock.ui.credentials.add
 
 import com.pablogv63.quicklock.domain.model.Category
 
-data class AddFormState(
+data class AddState(
     val name: String = "",
     val nameError: String? = null,
     val username: String = "",

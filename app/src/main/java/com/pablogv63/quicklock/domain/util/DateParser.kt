@@ -25,7 +25,7 @@ object DateParser {
 
     fun LocalDate.toParsedDayMonthYearString(): String{
         val day = this.dayOfMonth
-        val month = this.month
+        val month = this.monthValue
         val year = this.year
         return "$day/$month/$year"
     }

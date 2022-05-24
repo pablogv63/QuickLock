@@ -53,6 +53,18 @@ class MainViewModel(
                     categories = listOf(cats[1])
                 )
             )
+            credentialsWithCategories.add(
+                CredentialWithCategoryList(
+                    credential = creds[3],
+                    categories = listOf()
+                )
+            )
+            credentialsWithCategories.add(
+                CredentialWithCategoryList(
+                    credential = creds[4],
+                    categories = listOf()
+                )
+            )
             credentialsWithCategories.map {
                 credentialUseCases.addCredentialWithCategories(it)
             }
@@ -87,7 +99,25 @@ class MainViewModel(
             lastAccess = LocalDate.of(2022,5,15),
             lastModified = LocalDate.of(2022,5,10)
         )
-        return listOf(cred1,cred2,cred3)
+        val cred4 = Credential(
+            credentialId = 4,
+            name = "Credential 4",
+            username = "cred4@mail.com",
+            password = "********",
+            expirationDate = null,
+            lastAccess = LocalDate.of(2022,5,15),
+            lastModified = LocalDate.of(2022,5,10)
+        )
+        val cred5 = Credential(
+            credentialId = 5,
+            name = "Credential 5",
+            username = "cred5@mail.com",
+            password = "********",
+            expirationDate = null,
+            lastAccess = LocalDate.of(2022,5,15),
+            lastModified = LocalDate.of(2022,5,10)
+        )
+        return listOf(cred1,cred2,cred3,cred4,cred5)
     }
 
     private fun sampleCategories(): List<Category> {

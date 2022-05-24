@@ -1,4 +1,4 @@
-package com.pablogv63.quicklock.ui.credentials.add.components
+package com.pablogv63.quicklock.ui.credentials.form.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -7,8 +7,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -48,7 +46,7 @@ fun Field(
         if(showAsPassword)
             PasswordVisualTransformation()
         else
-            VisualTransformation.None
+            VisualTransformation.None,
     )
     if (errorValue != null) {
         Text(

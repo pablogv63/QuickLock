@@ -1,23 +1,18 @@
-package com.pablogv63.quicklock.ui.credentials.add
+package com.pablogv63.quicklock.ui.credentials.edit
 
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Sync
-import androidx.compose.material.icons.filled.Today
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
-import com.pablogv63.quicklock.ui.credentials.add.components.AddScreenTopAppBar
-import com.pablogv63.quicklock.ui.credentials.edit.EditScreenContent
+import com.pablogv63.quicklock.ui.credentials.edit.components.EditScreenTopAppBar
 import com.pablogv63.quicklock.ui.credentials.form.FormEvent
 import com.pablogv63.quicklock.ui.credentials.form.FormState
 import com.pablogv63.quicklock.ui.credentials.form.components.CategoryDropdownMenu
@@ -28,27 +23,31 @@ import com.pablogv63.quicklock.ui.navigation.QuickLockNavigationBar
 import com.pablogv63.quicklock.ui.tools.AppPaddingValues
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.viewModel
+import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination
 @Composable
-fun AddScreen(
-    viewModel: AddViewModel = getViewModel(),
-    navigator: DestinationsNavigator
-) {
+fun EditScreen(
+    navigator: DestinationsNavigator,
+    credentialId: Int
+){
+    val viewModel: EditViewModel by viewModel {
+        parametersOf(credentialId)
+    }
     val formState = viewModel.formState
-    val addState = viewModel.addState
+    val editState = viewModel.editState
     val context = LocalContext.current
 
     //Gets called when validation is a success
     LaunchedEffect(key1 = context) {
         viewModel.validationEvents.collect { event ->
             when(event){
-                AddViewModel.ValidationEvent.Success -> {
+                EditViewModel.ValidationEvent.Success -> {
                     Toast.makeText(
                         context,
-                        "${formState.name} added successfully",
+                        "${formState.name} edited successfully",
                         Toast.LENGTH_LONG
                     ).show()
                     // Navigate back
@@ -59,8 +58,8 @@ fun AddScreen(
     }
 
     Scaffold(
-        topBar = { AddScreenTopAppBar(
-            title = "New credential",
+        topBar = { EditScreenTopAppBar(
+            title = "Edit ${formState.name}",
             onArrowBackClick = { navigator.navigateUp() },
             onCheckClick = { viewModel.onEvent(FormEvent.Submit) }
         ) },
@@ -74,9 +73,9 @@ fun AddScreen(
             )
         }
     ) { innerPadding ->
-        AddScreenContent(
+        EditScreenContent(
             formState = formState,
-            addState = addState,
+            editState = editState,
             viewModel = viewModel,
             innerPadding = innerPadding,
             context = context
@@ -84,11 +83,12 @@ fun AddScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddScreenContent(
+fun EditScreenContent(
     formState: FormState,
-    addState: AddState,
-    viewModel: AddViewModel,
+    editState: EditState,
+    viewModel: EditViewModel,
     innerPadding: PaddingValues,
     context: Context
 ){
@@ -100,7 +100,7 @@ fun AddScreenContent(
                 bottom = innerPadding.calculateBottomPadding(),
                 start = AppPaddingValues.Medium,
                 end = AppPaddingValues.Medium
-            )
+            ),
     ) {
         // Name
         Field(
@@ -112,7 +112,7 @@ fun AddScreenContent(
             label = "Name",
             keyboardType = KeyboardType.Text
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(AppPaddingValues.Medium))
         // Username
         Field(
             value = formState.username,
@@ -123,7 +123,7 @@ fun AddScreenContent(
             label = "Username",
             keyboardType = KeyboardType.Email
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(AppPaddingValues.Medium))
         // Password
         var showAsPassword by remember { mutableStateOf(true) }
         Field(
@@ -150,10 +150,10 @@ fun AddScreenContent(
             },
             showAsPassword = showAsPassword
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(AppPaddingValues.Medium))
         // Repeat Password
         var showRepeatedAsPassword by remember { mutableStateOf(true) }
-        AnimatedVisibility(visible = formState.password.isNotBlank()) {
+        AnimatedVisibility(visible = formState.passwordTextChanged) {
             Column {
                 Field(
                     value = formState.repeatedPassword,
@@ -164,7 +164,9 @@ fun AddScreenContent(
                     label = "Repeat password",
                     keyboardType = KeyboardType.Password,
                     trailingIcon = {
-                        IconButton(onClick = { showRepeatedAsPassword = !showRepeatedAsPassword }) {
+                        IconButton(onClick = {
+                            showRepeatedAsPassword = !showRepeatedAsPassword
+                        }) {
                             Icon(
                                 imageVector =
                                 if (showRepeatedAsPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
@@ -174,7 +176,7 @@ fun AddScreenContent(
                     },
                     showAsPassword = showAsPassword
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(AppPaddingValues.Medium))
             }
         }
         // Expiration date
@@ -194,7 +196,6 @@ fun AddScreenContent(
             },
             errorValue = formState.expirationDateError,
             label = "Expiration date",
-            supportiveText = "*Optional",
             keyboardType = KeyboardType.Text,
             trailingIcon = {
                 IconButton(onClick = { expirationDatePickerDialog.show() }) {
@@ -203,16 +204,36 @@ fun AddScreenContent(
             },
             readOnly = true
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(AppPaddingValues.Medium))
         // Category
         CategoryDropdownMenu(
             categoryName = formState.category,
             onValueChange = { viewModel.onEvent(FormEvent.CategoryChanged(it)) },
             categories = formState.categories,
-            onDropdownMenuClick = { viewModel.onEvent(FormEvent.CategoryChanged(it)) }
+            onDropdownMenuClick = { viewModel.onEvent(FormEvent.CategoryChanged(it)) },
+            fromEdit = true
         )
+        // Delete button
+        Box(modifier = Modifier.fillMaxSize()) {
+            FilledIconButton(
+                onClick = { viewModel.onEvent(EditEvent.Delete(editState.credentialId)) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomEnd),
+                colors = IconButtonDefaults.filledIconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Row {
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = "Delete"
+                    )
+                    Spacer(modifier = Modifier.width(AppPaddingValues.Small))
+                    Text(text = "Delete")
+                }
+            }
+        }
     }
 }
-
-
-

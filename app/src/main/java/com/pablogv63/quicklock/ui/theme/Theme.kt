@@ -1,6 +1,7 @@
 package com.pablogv63.quicklock.ui.theme
 
 import android.os.Build
+import android.view.WindowManager
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable

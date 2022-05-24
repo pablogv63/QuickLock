@@ -11,12 +11,16 @@ import kotlinx.coroutines.withContext
 class CredentialCategoryPairRepositoryImpl(
     private val dao: CredentialCategoryPairDao
 ): CredentialCategoryPairRepository {
-    override suspend fun getAll(): Flow<List<CredentialCategoryPair>> {
+    override fun getAll(): Flow<List<CredentialCategoryPair>> {
         return dao.getCredentialCategoryPairs()
     }
 
-    override suspend fun getCredentialsWithCategories(): Flow<List<CredentialWithCategoryList>> {
+    override fun getCredentialsWithCategories(): Flow<List<CredentialWithCategoryList>> {
         return dao.getCredentialsWithCategories()
+    }
+
+    override fun getCredentialWithCategoriesFromId(credentialId: Int): Flow<CredentialWithCategoryList> {
+        return dao.getCredentialWithCategoriesFromId(credentialId)
     }
 
     override suspend fun insertAll(credentialCategoryPairs: List<CredentialCategoryPair>) {

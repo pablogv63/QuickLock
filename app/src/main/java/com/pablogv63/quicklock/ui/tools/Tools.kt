@@ -17,12 +17,4 @@ object Tools {
         val clipData = ClipData.newPlainText(label, content)
         clipboardManager.setPrimaryClip(clipData)
     }
-
-    /**
-     * Converts category name to a Category?????????
-     * TODO: Handle color
-     */
-    fun String.toCategory(){
-
-    }
 }

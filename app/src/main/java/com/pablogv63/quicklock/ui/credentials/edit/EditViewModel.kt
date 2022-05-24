@@ -1,4 +1,4 @@
-package com.pablogv63.quicklock.ui.credentials.add
+package com.pablogv63.quicklock.ui.credentials.edit
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,23 +10,26 @@ import com.pablogv63.quicklock.domain.model.CredentialWithCategoryList
 import com.pablogv63.quicklock.domain.use_case.CredentialUseCases
 import com.pablogv63.quicklock.domain.use_case.form.FormUseCases
 import com.pablogv63.quicklock.domain.util.DateParser.toLocalDate
+import com.pablogv63.quicklock.domain.util.DateParser.toParsedDayMonthYearString
 import com.pablogv63.quicklock.ui.credentials.form.FormEvent
 import com.pablogv63.quicklock.ui.credentials.form.FormState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-class AddViewModel(
+class EditViewModel(
     private val credentialUseCases: CredentialUseCases,
-    private val formUseCases: FormUseCases
+    private val formUseCases: FormUseCases,
+    private val credentialId: Int
 ): ViewModel() {
 
     var formState by mutableStateOf(FormState())
-    var addState by mutableStateOf(AddState())
+    var editState by mutableStateOf(EditState())
 
     private val validationEventChannel = Channel<ValidationEvent>()
     val validationEvents = validationEventChannel.receiveAsFlow()
@@ -35,9 +38,10 @@ class AddViewModel(
 
     init {
         getCategories()
+        initializeFields()
     }
 
-    private fun getCategories(){
+    private fun getCategories() {
         getCategoriesJob?.cancel()
         getCategoriesJob = credentialUseCases.getCategories()
             .onEach { categories ->
@@ -48,7 +52,39 @@ class AddViewModel(
             .launchIn(viewModelScope)
     }
 
-    fun onEvent(formEvent: FormEvent){
+    private fun initializeFields() {
+        viewModelScope.launch {
+            val credentialWithCategoryListFlow =
+                credentialUseCases.getCredentialWithCategoriesFromId(credentialId)
+            credentialWithCategoryListFlow.collectLatest {
+                val credential = it.credential
+                editState = editState.copy(
+                    credentialId = credentialId
+                )
+                formState = formState.copy(
+                    name = credential.name,
+                    username = credential.username,
+                    password = credential.password,
+                    expirationDate = credential.expirationDate?.toParsedDayMonthYearString() ?: "",
+                    category = it.categories.firstOrNull()?.name ?: "",
+                    originalPassword = credential.password
+                )
+            }
+
+        }
+    }
+
+    fun onEvent(editEvent: EditEvent) {
+        when (editEvent) {
+            is EditEvent.Delete -> {
+                viewModelScope.launch {
+                    credentialUseCases.deleteCredential(editState.credentialId)
+                }
+            }
+        }
+    }
+
+    fun onEvent(formEvent: FormEvent) {
         when (formEvent) {
             is FormEvent.NameChanged -> {
                 val nameResult = formUseCases.validateName(formEvent.name)
@@ -66,9 +102,11 @@ class AddViewModel(
             }
             is FormEvent.PasswordChanged -> {
                 val passwordResult = formUseCases.validatePassword(formEvent.password)
+                // Check if password content changed
                 formState = formState.copy(
                     password = formEvent.password,
-                    passwordError = passwordResult.errorMessage
+                    passwordError = passwordResult.errorMessage,
+                    passwordTextChanged = formState.originalPassword != formEvent.password
                 )
             }
             is FormEvent.RepeatedPasswordChanged -> {
@@ -105,13 +143,16 @@ class AddViewModel(
         }
     }
 
-    private fun submitData(){
+    private fun submitData() {
         val nameResult = formUseCases.validateName(formState.name)
         val usernameResult = formUseCases.validateUsername(formState.username)
         val passwordResult = formUseCases.validatePassword(formState.password)
-        val repeatedPasswordResult = formUseCases.validateRepeatedPassword(
-            formState.password, formState.repeatedPassword
-        )
+        val repeatedPasswordResult = // If password didn't change, ignore
+            if (formState.passwordTextChanged)
+                formUseCases.validateRepeatedPassword(
+                    formState.password, formState.repeatedPassword
+                )
+            else passwordResult
         val expirationDateResult = formUseCases.validateExpirationDate(formState.expirationDate)
         val categoryResult = formUseCases.validateCategory(formState.category, formState.categories)
 
@@ -132,11 +173,13 @@ class AddViewModel(
             expirationDateResult,
             categoryResult
         ).any { !it.successful }
-        if (hasError) { return }
+        if (hasError) {
+            return
+        }
 
         viewModelScope.launch {
             val credentialWithCategoryList = stateToCredentialWithCategoryList()
-            credentialUseCases.addCredentialWithCategories(credentialWithCategoryList)
+            credentialUseCases.editCredentialWithCategories(credentialWithCategoryList)
             validationEventChannel.send(ValidationEvent.Success)
         }
     }
@@ -149,7 +192,7 @@ class AddViewModel(
                 listOf(formState.categories.first { formState.category == it.name })
         return CredentialWithCategoryList(
             Credential(
-                credentialId = 0,
+                credentialId = credentialId,
                 name = formState.name,
                 username = formState.username,
                 password = formState.password,
@@ -161,8 +204,8 @@ class AddViewModel(
         )
     }
 
-    sealed class ValidationEvent{
-        object Success: ValidationEvent()
+    sealed class ValidationEvent {
+        object Success : ValidationEvent()
     }
 }
 

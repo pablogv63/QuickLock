@@ -30,6 +30,9 @@ interface CredentialDao {
     @Delete
     fun delete(credential: Credential): Int
 
+    @Query("Delete From credential Where credentialId=:credentialId")
+    fun delete(credentialId: Int): Int
+
     @Update
     fun update(credential: Credential): Int
 }

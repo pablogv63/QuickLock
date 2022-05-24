@@ -1,4 +1,4 @@
-package com.pablogv63.quicklock.ui.credentials.add.components
+package com.pablogv63.quicklock.ui.credentials.form.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.*
@@ -13,7 +13,8 @@ fun CategoryDropdownMenu(
     categoryName: String,
     onValueChange: (String) -> Unit,
     categories: List<Category>,
-    onDropdownMenuClick: (String) -> Unit
+    onDropdownMenuClick: (String) -> Unit,
+    fromEdit: Boolean = false
 ){
     var expanded by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(
@@ -28,7 +29,7 @@ fun CategoryDropdownMenu(
                 onValueChange = { onValueChange(it) },
                 errorValue = null,
                 label = "Category",
-                supportiveText = "*Optional",
+                supportiveText = if (!fromEdit) "*Optional" else "",
                 keyboardType = KeyboardType.Text,
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
