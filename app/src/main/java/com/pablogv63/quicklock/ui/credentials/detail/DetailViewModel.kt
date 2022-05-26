@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pablogv63.quicklock.domain.use_case.CredentialUseCases
 import com.pablogv63.quicklock.domain.util.DateParser.toParsedDayMonthYearString
+import com.pablogv63.quicklock.domain.util.DateTools.timeSince
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -29,6 +30,8 @@ class DetailViewModel(
         getCredentialJob = credentialUseCases.getCredentialWithCategoriesFromId(credentialId)
             .onEach { credentialWithCategoryList ->
                 val credential = credentialWithCategoryList.credential
+                val lastModifiedParsed = credential.lastModified.toParsedDayMonthYearString()
+                val lastAccessParsed = credential.lastAccess.toParsedDayMonthYearString()
                 detailState = detailState.copy(
                     credentialId = credentialId,
                     name = credential.name,
@@ -36,8 +39,8 @@ class DetailViewModel(
                     password = credential.password,
                     expirationDate = credential.expirationDate?.toParsedDayMonthYearString() ?: "",
                     categories = credentialWithCategoryList.categories,
-                    lastModified = credential.lastModified.toParsedDayMonthYearString(),
-                    lastAccess = credential.lastAccess.toParsedDayMonthYearString()
+                    lastModified = "${credential.lastModified.timeSince()} (${lastModifiedParsed})",
+                    lastAccess = "${credential.lastAccess.timeSince()} (${lastAccessParsed})"
                 )
             }
             .launchIn(viewModelScope)

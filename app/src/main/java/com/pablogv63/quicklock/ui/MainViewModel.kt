@@ -62,7 +62,7 @@ class MainViewModel(
             credentialsWithCategories.add(
                 CredentialWithCategoryList(
                     credential = creds[4],
-                    categories = listOf()
+                    categories = listOf(cats[1])
                 )
             )
             credentialsWithCategories.map {
@@ -110,11 +110,11 @@ class MainViewModel(
         )
         val cred5 = Credential(
             credentialId = 5,
-            name = "Credential 5",
-            username = "cred5@mail.com",
-            password = "********",
+            name = "Credential example",
+            username = "credexample@mail.com",
+            password = "lCn68yIHuTPl9CDZD8k7AF",
             expirationDate = null,
-            lastAccess = LocalDate.of(2022,5,15),
+            lastAccess = LocalDate.of(2022,4,15),
             lastModified = LocalDate.of(2022,5,10)
         )
         return listOf(cred1,cred2,cred3,cred4,cred5)

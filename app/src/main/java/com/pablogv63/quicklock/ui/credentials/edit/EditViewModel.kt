@@ -31,6 +31,8 @@ class EditViewModel(
     var formState by mutableStateOf(FormState())
     var editState by mutableStateOf(EditState())
 
+    lateinit var credentialWithCategoryList: CredentialWithCategoryList
+
     private val validationEventChannel = Channel<ValidationEvent>()
     val validationEvents = validationEventChannel.receiveAsFlow()
 
@@ -57,6 +59,7 @@ class EditViewModel(
             val credentialWithCategoryListFlow =
                 credentialUseCases.getCredentialWithCategoriesFromId(credentialId)
             credentialWithCategoryListFlow.collectLatest {
+                credentialWithCategoryList = it
                 val credential = it.credential
                 editState = editState.copy(
                     credentialId = credentialId
@@ -197,8 +200,8 @@ class EditViewModel(
                 username = formState.username,
                 password = formState.password,
                 expirationDate = formState.expirationDate.toLocalDate(),
-                lastModified = LocalDate.now(),
-                lastAccess = LocalDate.now()
+                lastModified = credentialWithCategoryList.credential.lastModified,
+                lastAccess = credentialWithCategoryList.credential.lastAccess
             ),
             categories = categories
         )

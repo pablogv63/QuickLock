@@ -14,11 +14,14 @@ import com.pablogv63.quicklock.domain.repository.CredentialCategoryPairRepositor
 import com.pablogv63.quicklock.domain.repository.CredentialRepository
 import com.pablogv63.quicklock.domain.use_case.*
 import com.pablogv63.quicklock.domain.use_case.form.*
+import com.pablogv63.quicklock.domain.use_case.generator.GeneratePassword
+import com.pablogv63.quicklock.domain.use_case.generator.GeneratorUseCases
 import com.pablogv63.quicklock.ui.MainViewModel
 import com.pablogv63.quicklock.ui.credentials.add.AddViewModel
 import com.pablogv63.quicklock.ui.credentials.detail.DetailViewModel
 import com.pablogv63.quicklock.ui.credentials.edit.EditViewModel
 import com.pablogv63.quicklock.ui.credentials.list.CredentialsViewModel
+import com.pablogv63.quicklock.ui.generator.GeneratorViewModel
 import com.pablogv63.quicklock.ui.navigation.NavigationScreen
 import com.pablogv63.quicklock.ui.navigation.NavigationScreens
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -67,6 +70,11 @@ val appModule = module {
             ValidateCategory()
         )
     }
+    single<GeneratorUseCases> {
+        GeneratorUseCases(
+            GeneratePassword()
+        )
+    }
     viewModel<MainViewModel> {
         MainViewModel(get(), get())
     }
@@ -81,5 +89,8 @@ val appModule = module {
     }
     viewModel<DetailViewModel> { (credentialId: Int) ->
         DetailViewModel(get(),credentialId)
+    }
+    viewModel<GeneratorViewModel> {
+        GeneratorViewModel(get())
     }
 }

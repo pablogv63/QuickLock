@@ -77,7 +77,6 @@ fun DetailScreenContent(
             .fillMaxSize()
             .padding(
                 top = innerPadding.calculateTopPadding(),
-                bottom = innerPadding.calculateBottomPadding(),
                 start = AppPaddingValues.Small,
                 end = AppPaddingValues.Small
             ),

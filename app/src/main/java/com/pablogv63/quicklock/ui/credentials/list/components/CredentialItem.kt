@@ -106,10 +106,9 @@ fun CredentialItemContent(credentialItemValues: CredentialItemValues){
             // Second row
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 CopyButton(text = "Copy Username", credentialItemValues.onCopyUsernameClick)
-                Spacer(modifier = Modifier.width(4.dp))
                 CopyButton(text = "Copy password", credentialItemValues.onCopyPasswordClick)
             }
         }

@@ -19,6 +19,7 @@ import com.pablogv63.quicklock.ui.credentials.form.components.CategoryDropdownMe
 import com.pablogv63.quicklock.ui.credentials.form.components.ExpirationDatePickerDialog
 import com.pablogv63.quicklock.ui.credentials.form.components.Field
 import com.pablogv63.quicklock.ui.destinations.CredentialsScreenDestination
+import com.pablogv63.quicklock.ui.destinations.GeneratorScreenDestination
 import com.pablogv63.quicklock.ui.navigation.QuickLockNavigationBar
 import com.pablogv63.quicklock.ui.tools.AppPaddingValues
 import com.ramcosta.composedestinations.annotation.Destination
@@ -78,7 +79,8 @@ fun EditScreen(
             editState = editState,
             viewModel = viewModel,
             innerPadding = innerPadding,
-            context = context
+            context = context,
+            navigateToGenerator = { navigator.navigate(GeneratorScreenDestination(true)) }
         )
     }
 }
@@ -90,7 +92,8 @@ fun EditScreenContent(
     editState: EditState,
     viewModel: EditViewModel,
     innerPadding: PaddingValues,
-    context: Context
+    context: Context,
+    navigateToGenerator: () -> Unit
 ){
     Column(
         modifier = Modifier
@@ -143,7 +146,7 @@ fun EditScreenContent(
                             contentDescription = "See password"
                         )
                     }
-                    IconButton(onClick = { /* TODO */ }) {
+                    IconButton(onClick = navigateToGenerator) {
                         Icon(imageVector = Icons.Filled.Sync, contentDescription = "Generate")
                     }
                 }
@@ -152,7 +155,6 @@ fun EditScreenContent(
         )
         Spacer(modifier = Modifier.height(AppPaddingValues.Medium))
         // Repeat Password
-        var showRepeatedAsPassword by remember { mutableStateOf(true) }
         AnimatedVisibility(visible = formState.passwordTextChanged) {
             Column {
                 Field(
@@ -165,11 +167,11 @@ fun EditScreenContent(
                     keyboardType = KeyboardType.Password,
                     trailingIcon = {
                         IconButton(onClick = {
-                            showRepeatedAsPassword = !showRepeatedAsPassword
+                            showAsPassword = !showAsPassword
                         }) {
                             Icon(
                                 imageVector =
-                                if (showRepeatedAsPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                                if (showAsPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                                 contentDescription = "See password"
                             )
                         }

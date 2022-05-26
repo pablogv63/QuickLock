@@ -17,7 +17,8 @@ object TestUtil {
             username = username,
             password = password,
             lastAccess = LocalDate.now(),
-            lastModified = LocalDate.now()
+            lastModified = LocalDate.now(),
+            expirationDate = null
         )
     }
 

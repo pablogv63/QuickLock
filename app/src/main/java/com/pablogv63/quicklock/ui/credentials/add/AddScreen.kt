@@ -23,7 +23,9 @@ import com.pablogv63.quicklock.ui.credentials.form.FormState
 import com.pablogv63.quicklock.ui.credentials.form.components.CategoryDropdownMenu
 import com.pablogv63.quicklock.ui.credentials.form.components.ExpirationDatePickerDialog
 import com.pablogv63.quicklock.ui.credentials.form.components.Field
+import com.pablogv63.quicklock.ui.destinations.AddScreenDestination
 import com.pablogv63.quicklock.ui.destinations.CredentialsScreenDestination
+import com.pablogv63.quicklock.ui.destinations.GeneratorScreenDestination
 import com.pablogv63.quicklock.ui.navigation.QuickLockNavigationBar
 import com.pablogv63.quicklock.ui.tools.AppPaddingValues
 import com.ramcosta.composedestinations.annotation.Destination
@@ -79,7 +81,10 @@ fun AddScreen(
             addState = addState,
             viewModel = viewModel,
             innerPadding = innerPadding,
-            context = context
+            context = context,
+            navigateToGenerator = {
+                navigator.navigate(GeneratorScreenDestination(fromCredentialView = true))
+            }
         )
     }
 }
@@ -90,7 +95,8 @@ fun AddScreenContent(
     addState: AddState,
     viewModel: AddViewModel,
     innerPadding: PaddingValues,
-    context: Context
+    context: Context,
+    navigateToGenerator: () -> Unit
 ){
     Column(
         modifier = Modifier
@@ -143,7 +149,7 @@ fun AddScreenContent(
                             contentDescription = "See password"
                         )
                     }
-                    IconButton(onClick = { /* TODO */ }) {
+                    IconButton(onClick = navigateToGenerator) {
                         Icon(imageVector = Icons.Filled.Sync, contentDescription = "Generate")
                     }
                 }

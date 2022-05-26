@@ -46,7 +46,7 @@ fun CredentialsScreen(
             }
         },
         topBar = {
-            SmallTopAppBar(
+            CenterAlignedTopAppBar(
                 title = { Text("QuickLock") },
                 navigationIcon = {
                     IconButton(onClick = { /*TODO*/ }) {
