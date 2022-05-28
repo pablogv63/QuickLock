@@ -20,6 +20,16 @@ buildscript {
 
         // Navigation
         compose_destinations_version = '1.5.5-beta'
+
+        // Security
+        security_version = "1.0.0"
+        security_identity_credential_version = "1.0.0-alpha03"
+
+        // Compose Preferences
+        compose_preferences_version = "0.1.4"
+
+        // Gson
+        gson_version = "2.9.0"
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {

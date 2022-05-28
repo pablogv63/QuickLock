@@ -28,6 +28,8 @@ class MainViewModel(
 
     private var getExamplePeopleJob: Job? = null
 
+    lateinit var list: List<CredentialWithCategoryList>
+
     init {
         //TODO: Debug purposes only
         viewModelScope.launch(Dispatchers.IO){
@@ -68,6 +70,7 @@ class MainViewModel(
             credentialsWithCategories.map {
                 credentialUseCases.addCredentialWithCategories(it)
             }
+            list = credentialsWithCategories
         }
     }
 

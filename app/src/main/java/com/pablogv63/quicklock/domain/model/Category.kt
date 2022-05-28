@@ -9,4 +9,16 @@ data class Category (
     val categoryId: Int = -1,
     val name: String,
     val colour: Int
-)
+){
+    fun toValuesList() = listOf(
+        categoryId.toString(),
+        name,
+        colour.toString()
+    )
+
+    companion object{
+        fun variableNamesList() = listOf(
+            "[categoryId]", "[name]", "[colour]"
+        )
+    }
+}

@@ -56,6 +56,14 @@ android {
     }
 }
 
+// https://chetangupta.net/db-to-csv/
+configurations {
+    all {
+        // resolves conflicts of openCSV with platform common-logging
+        exclude module: 'commons-logging'
+    }
+}
+
 dependencies {
 
     /* General app dependencies */
@@ -93,4 +101,25 @@ dependencies {
     (https://composedestinations.rafaelcosta.xyz/) */
     implementation "io.github.raamcosta.compose-destinations:animations-core:$compose_destinations_version"
     ksp "io.github.raamcosta.compose-destinations:ksp:$compose_destinations_version"
+
+    /* Android Security */
+    implementation "androidx.security:security-crypto:$security_version"
+    // For Identity Credential APIs
+    implementation "androidx.security:security-identity-credential:$security_identity_credential_version"
+    // For App Authentication APIs
+    implementation "androidx.security:security-app-authenticator:1.0.0-alpha02"
+    // For App Authentication API testing
+    androidTestImplementation "androidx.security:security-app-authenticator:1.0.0-alpha02"
+
+
+    /* Kotlin CSV
+    * (https://medium.com/@tonia.tkachuk/how-to-export-room-database-to-csv-file-a51fec589618)*/
+    implementation "com.github.doyaaaaaken:kotlin-csv-jvm:1.3.0"
+
+    /* Compose Preferences
+    * (https://github.com/Sh4dowSoul/ComposePreferences) */
+    implementation "com.github.Sh4dowSoul.ComposePreferences:preferences-material3:$compose_preferences_version"
+
+    /* GSON */
+    implementation "com.google.code.gson:gson:$gson_version"
 }

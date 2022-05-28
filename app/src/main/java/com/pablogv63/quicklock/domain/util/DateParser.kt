@@ -1,5 +1,9 @@
 package com.pablogv63.quicklock.domain.util
 
+import com.google.gson.TypeAdapter
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonToken
+import com.google.gson.stream.JsonWriter
 import java.time.LocalDate
 
 object DateParser {
@@ -28,5 +32,25 @@ object DateParser {
         val month = this.monthValue
         val year = this.year
         return "$day/$month/$year"
+    }
+
+    class LocalDateAdapter: TypeAdapter<LocalDate>() {
+        override fun write(out: JsonWriter?, value: LocalDate?) {
+            if (value == null) {
+                out?.nullValue()
+            } else {
+                out?.value(value.toParsedDayMonthYearString())
+            }
+        }
+
+        override fun read(jsonReader: JsonReader?): LocalDate? {
+            return if (jsonReader?.peek() == JsonToken.NULL){
+                jsonReader.nextNull()
+                null
+            } else {
+                jsonReader?.nextString()?.toLocalDate()
+            }
+        }
+
     }
 }

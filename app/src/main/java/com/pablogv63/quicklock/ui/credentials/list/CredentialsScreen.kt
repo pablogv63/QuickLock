@@ -6,13 +6,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LifecycleCoroutineScope
 import com.pablogv63.quicklock.ui.credentials.list.components.CredentialItem
 import com.pablogv63.quicklock.ui.destinations.AddScreenDestination
 import com.pablogv63.quicklock.ui.destinations.DetailScreenDestination
@@ -22,7 +24,6 @@ import com.pablogv63.quicklock.ui.tools.Tools.copyTextToClipboard
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 

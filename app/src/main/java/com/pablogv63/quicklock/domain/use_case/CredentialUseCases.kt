@@ -8,5 +8,6 @@ data class CredentialUseCases(
     val addCredentialWithCategories: AddCredentialWithCategories,
     val editCredentialWithCategories: EditCredentialWithCategories,
     val deleteCredential: DeleteCredential,
-    val addCategory: AddCategory
+    val addCategory: AddCategory,
+    val repopulateDatabase: RepopulateDatabase
 )

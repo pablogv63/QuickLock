@@ -24,6 +24,7 @@ import com.pablogv63.quicklock.ui.credentials.list.CredentialsViewModel
 import com.pablogv63.quicklock.ui.generator.GeneratorViewModel
 import com.pablogv63.quicklock.ui.navigation.NavigationScreen
 import com.pablogv63.quicklock.ui.navigation.NavigationScreens
+import com.pablogv63.quicklock.ui.settings.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -57,7 +58,8 @@ val appModule = module {
             AddCredentialWithCategories(get(),get(),get()),
             EditCredentialWithCategories(get(),get(),get()),
             DeleteCredential(get(),get()),
-            AddCategory(get())
+            AddCategory(get()),
+            RepopulateDatabase(get(),get(),get(),get())
         )
     }
     single<FormUseCases> {
@@ -92,5 +94,8 @@ val appModule = module {
     }
     viewModel<GeneratorViewModel> {
         GeneratorViewModel(get())
+    }
+    viewModel<SettingsViewModel> {
+        SettingsViewModel(get())
     }
 }

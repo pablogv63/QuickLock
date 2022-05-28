@@ -15,4 +15,14 @@ data class CredentialWithCategoryList(
         associateBy = Junction(CredentialCategoryPair::class)
     )
     val categories: List<Category>
-)
+){
+    /**
+     * Obtains all values in format (credential values) + (categories.size) +
+     * (category 0 values) + (category 1 values) ...
+     */
+    fun toValuesList(): List<String> =
+        credential.toValuesList().plus(
+            listOf(categories.size.toString())).plus(
+            categories.map { category -> category.toValuesList() }.flatten())
+
+}
