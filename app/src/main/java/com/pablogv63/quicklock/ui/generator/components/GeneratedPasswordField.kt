@@ -12,11 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.pablogv63.quicklock.R
 import com.pablogv63.quicklock.ui.tools.AppPaddingValues
 import com.pablogv63.quicklock.ui.tools.Tools.copyTextToClipboard
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
 @Composable
 fun GeneratedPasswordField(
     onRegenerateClick: () -> Unit,
@@ -37,7 +39,7 @@ fun GeneratedPasswordField(
             IconButton(onClick = onRegenerateClick) {
                 Icon(
                     imageVector = Icons.Filled.Sync,
-                    contentDescription = "Regenerate",
+                    contentDescription = stringResource(id = R.string.generatorScreen_regenerate),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
@@ -53,7 +55,7 @@ fun GeneratedPasswordField(
             }) {
                 Icon(
                     imageVector = Icons.Filled.ContentCopy,
-                    contentDescription = "Copy",
+                    contentDescription = stringResource(id = R.string.action_copy_password),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
@@ -61,6 +63,7 @@ fun GeneratedPasswordField(
     }
 }
 
+@ExperimentalMaterial3Api
 @Preview
 @Composable
 fun PreviewGeneratedPasswordField(){

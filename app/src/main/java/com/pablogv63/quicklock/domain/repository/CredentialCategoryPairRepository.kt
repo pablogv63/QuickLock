@@ -8,8 +8,10 @@ interface CredentialCategoryPairRepository {
 
     fun getAll(): Flow<List<CredentialCategoryPair>>
     fun getCredentialsWithCategories(): Flow<List<CredentialWithCategoryList>>
-    fun getCredentialWithCategoriesFromId(credentialId: Int): Flow<CredentialWithCategoryList>
+    fun getCredentialWithCategoriesFromId(credentialId: Int): Flow<CredentialWithCategoryList?>
     suspend fun insertAll(credentialCategoryPairs: List<CredentialCategoryPair>)
     suspend fun insertCredentialCategoryPair(credentialCategoryPair: CredentialCategoryPair)
     suspend fun deleteCredentialCategoryPair(credentialCategoryPair: CredentialCategoryPair)
+    fun getAllFromId(credentialId: Int): Flow<List<CredentialCategoryPair>>
+    suspend fun deleteCredentialWithCategoriesFromId(credentialId: Int)
 }

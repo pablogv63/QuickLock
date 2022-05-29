@@ -1,6 +1,7 @@
 package com.pablogv63.quicklock.ui.credentials.detail
 
 import android.content.Context
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
@@ -11,15 +12,18 @@ import androidx.compose.material.icons.outlined.WarningAmber
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
+import com.pablogv63.quicklock.R
 import com.pablogv63.quicklock.domain.util.DateGuidelines.expiresSoon
 import com.pablogv63.quicklock.ui.credentials.detail.components.CardField
 import com.pablogv63.quicklock.ui.credentials.detail.components.DetailScreenTopAppBar
-import com.pablogv63.quicklock.ui.destinations.CredentialsScreenDestination
 import com.pablogv63.quicklock.ui.destinations.EditScreenDestination
 import com.pablogv63.quicklock.ui.navigation.QuickLockNavigationBar
 import com.pablogv63.quicklock.ui.tools.AppPaddingValues
@@ -29,7 +33,9 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.viewModel
 import org.koin.core.parameter.parametersOf
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
+@ExperimentalComposeUiApi
+@ExperimentalAnimationApi
 @Destination
 @Composable
 fun DetailScreen(
@@ -49,11 +55,7 @@ fun DetailScreen(
         ) },
         bottomBar = {
             QuickLockNavigationBar(
-                current = "CredentialsScreen",
-                navigator = navigator,
-                onSameClick = {
-                    navigator.navigate(CredentialsScreenDestination)
-                }
+                navigator = navigator
             )
         }
     ) { innerPadding ->
@@ -65,7 +67,9 @@ fun DetailScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
+@ExperimentalComposeUiApi
+@ExperimentalAnimationApi
 @Composable
 fun DetailScreenContent(
     detailState: DetailState,
@@ -83,24 +87,27 @@ fun DetailScreenContent(
     ) {
         // Name
         CardField(
-            label = "Name",
+            label = stringResource(id = R.string.field_name_label),
             value = detailState.name,
             secondRowContent = {  }
         )
         // Username
         CardField(
-            label = "Username",
+            label = stringResource(id = R.string.field_username_label),
             value = detailState.username,
             secondRowContent = {
                 IconButton(onClick = { context.copyTextToClipboard("Username",detailState.username) }) {
-                    Icon(imageVector = Icons.Outlined.ContentCopy, contentDescription = "Copy username")
+                    Icon(
+                        imageVector = Icons.Outlined.ContentCopy,
+                        contentDescription = stringResource(id = R.string.action_copy_username)
+                    )
                 }
             }
         )
         // Password
         var passwordVisible by remember { mutableStateOf(false) }
         CardField(
-            label = "Password",
+            label = stringResource(id = R.string.field_password_label),
             value = if (passwordVisible) detailState.password else "********",
             secondRowContent = {
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
@@ -110,7 +117,7 @@ fun DetailScreenContent(
                     )
                 }
                 IconButton(onClick = { context.copyTextToClipboard("Password",detailState.password) }) {
-                    Icon(imageVector = Icons.Filled.ContentCopy, contentDescription = null)
+                    Icon(imageVector = Icons.Filled.ContentCopy, contentDescription = stringResource(id = R.string.action_copy_password))
                 }
             }
         )
@@ -126,14 +133,14 @@ fun DetailScreenContent(
             ) {
                 Column {
                     Text(
-                        text = "Categories",
+                        text = stringResource(id = R.string.field_categories_label),
                         style = MaterialTheme.typography.titleMedium
                     )
                     Spacer(modifier = Modifier.height(AppPaddingValues.Small))
                     Row {
                         if (detailState.categories.isEmpty()){
                             Text(
-                                text = "None",
+                                text = stringResource(id = R.string.field_categories_empty),
                                 style = MaterialTheme.typography.bodyLarge,
                             )
                         }
@@ -163,13 +170,13 @@ fun DetailScreenContent(
             ) {
                 Column {
                     Text(
-                        text = "Expiration date",
+                        text = stringResource(id = R.string.field_expirationDate_label),
                         style = MaterialTheme.typography.titleMedium
                     )
                     Spacer(modifier = Modifier.height(AppPaddingValues.Small))
                     Row {
                         Text(
-                            text = detailState.expirationDate.ifBlank { "None" },
+                            text = detailState.expirationDate.ifBlank { stringResource(id = R.string.field_expirationDate_empty) },
                             style = MaterialTheme.typography.bodyLarge
                         )
                         if (detailState.expirationDate.expiresSoon()){
@@ -179,7 +186,7 @@ fun DetailScreenContent(
                                 color = warningColor
                             )
                             Text(
-                                text = "Expires soon",
+                                text = stringResource(id = R.string.field_expirationDate_expiresSoon),
                                 style = MaterialTheme.typography.bodyLarge,
                                 color = warningColor
                             )
@@ -194,7 +201,7 @@ fun DetailScreenContent(
                     if (detailState.expirationDate.expiresSoon()){
                         Icon(
                             imageVector = Icons.Outlined.WarningAmber,
-                            contentDescription = "Expiration warning",
+                            contentDescription = stringResource(id = R.string.field_expirationDate_expiresSoon),
                             tint = warningColor,
                             modifier = Modifier.size(40.dp)
                         )
@@ -204,20 +211,22 @@ fun DetailScreenContent(
         }
         // Last modified
         CardField(
-            label = "Last modified",
+            label = stringResource(id = R.string.field_lastModified_label),
             value = detailState.lastModified,
             secondRowContent = {  }
         )
         // Last access
         CardField(
-            label = "Last access",
+            label = stringResource(id = R.string.field_lastAccessed_label),
             value = detailState.lastAccess,
             secondRowContent = {  }
         )
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
+@ExperimentalComposeUiApi
+@ExperimentalAnimationApi
 @Preview
 @Composable
 fun PreviewCard() {

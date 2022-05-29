@@ -6,5 +6,12 @@ import com.pablogv63.quicklock.domain.util.OrderType
 
 data class CredentialsState (
     val credentialsWithCategories: List<CredentialWithCategoryList> = emptyList(),
-    val credentialOrder: CredentialOrder = CredentialOrder.Name(OrderType.Descending)
+    val credentialOrder: CredentialOrder = CredentialOrder.LastAccessed(OrderType.Descending),
+    val isOrderMenuVisible: Boolean = false,
+    val isSearchBarVisible: Boolean = false,
+    val searchBarText: String = "",
+    val matchedCredentialsWithCategories: List<CredentialWithCategoryList> = emptyList(),
+    val filterByName: Boolean = true,
+    val filterByUsername: Boolean = true,
+    val filterByCategory: Boolean = true
 )

@@ -9,6 +9,7 @@ import com.pablogv63.quicklock.domain.use_case.CredentialUseCases
 import com.pablogv63.quicklock.domain.util.DateParser.toParsedDayMonthYearString
 import com.pablogv63.quicklock.domain.util.DateTools.timeSince
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -28,7 +29,7 @@ class DetailViewModel(
     private fun initializeFields(){
         getCredentialJob?.cancel()
         getCredentialJob = credentialUseCases.getCredentialWithCategoriesFromId(credentialId)
-            .onEach { credentialWithCategoryList ->
+            .filterNotNull().onEach { credentialWithCategoryList ->
                 val credential = credentialWithCategoryList.credential
                 val lastModifiedParsed = credential.lastModified.toParsedDayMonthYearString()
                 val lastAccessParsed = credential.lastAccess.toParsedDayMonthYearString()

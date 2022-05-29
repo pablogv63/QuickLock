@@ -1,5 +1,6 @@
 package com.pablogv63.quicklock.ui.credentials.list.components
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -9,12 +10,15 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.pablogv63.quicklock.R
 import com.pablogv63.quicklock.domain.model.CredentialWithCategoryList
 
 data class CredentialItemValues(
@@ -32,6 +36,9 @@ data class CredentialItemValues(
     )
 }
 
+@ExperimentalComposeUiApi
+@ExperimentalAnimationApi
+@ExperimentalMaterial3Api
 @Composable
 fun CredentialItem(
     credentialWithCategoryList: CredentialWithCategoryList,
@@ -60,7 +67,7 @@ fun CredentialItem(
     CredentialItemContent(credentialItemValues = credentialItemValues)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
 @Composable
 fun CredentialItemContent(credentialItemValues: CredentialItemValues){
     OutlinedCard (
@@ -108,8 +115,14 @@ fun CredentialItemContent(credentialItemValues: CredentialItemValues){
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                CopyButton(text = "Copy Username", credentialItemValues.onCopyUsernameClick)
-                CopyButton(text = "Copy password", credentialItemValues.onCopyPasswordClick)
+                CopyButton(
+                    text = stringResource(id = R.string.action_copy_username),
+                    credentialItemValues.onCopyUsernameClick
+                )
+                CopyButton(
+                    text = stringResource(id = R.string.action_copy_password),
+                    credentialItemValues.onCopyPasswordClick
+                )
             }
         }
     }
@@ -159,7 +172,7 @@ fun EditButton(
         contentAlignment = Alignment.BottomEnd
     ) {
         IconButton(onClick = onItemClick) {
-            Icon(imageVector = Icons.Outlined.Edit, contentDescription = "Edit")
+            Icon(imageVector = Icons.Outlined.Edit, contentDescription = stringResource(id = R.string.editScreen_topAppBar_title))
         }
     }
 }
@@ -181,6 +194,9 @@ fun CopyButton(
     }
 }
 
+@ExperimentalComposeUiApi
+@ExperimentalAnimationApi
+@ExperimentalMaterial3Api
 @Preview
 @Composable
 fun PreviewCredentialItem() {

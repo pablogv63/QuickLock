@@ -15,10 +15,7 @@ import com.pablogv63.quicklock.ui.credentials.form.FormEvent
 import com.pablogv63.quicklock.ui.credentials.form.FormState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -58,7 +55,7 @@ class EditViewModel(
         viewModelScope.launch {
             val credentialWithCategoryListFlow =
                 credentialUseCases.getCredentialWithCategoriesFromId(credentialId)
-            credentialWithCategoryListFlow.collectLatest {
+            credentialWithCategoryListFlow.filterNotNull().collectLatest {
                 credentialWithCategoryList = it
                 val credential = it.credential
                 editState = editState.copy(
@@ -73,7 +70,6 @@ class EditViewModel(
                     originalPassword = credential.password
                 )
             }
-
         }
     }
 

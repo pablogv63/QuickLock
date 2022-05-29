@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import com.pablogv63.quicklock.R
 import com.pablogv63.quicklock.domain.model.Category
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
 @Composable
 fun CategoryDropdownMenu(
     categoryName: String,
@@ -28,8 +30,8 @@ fun CategoryDropdownMenu(
                 value = categoryName,
                 onValueChange = { onValueChange(it) },
                 errorValue = null,
-                label = "Category",
-                supportiveText = if (!fromEdit) "*Optional" else "",
+                label = stringResource(id = R.string.field_category_label),
+                supportiveText = if (!fromEdit) stringResource(id = R.string.field_optional) else "",
                 keyboardType = KeyboardType.Text,
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
@@ -40,14 +42,12 @@ fun CategoryDropdownMenu(
                 onDismissRequest = { expanded = false }
             ) {
                 categories.forEach { category ->
-                    if (category.name.lowercase().contains(categoryName.lowercase())){
                         DropdownMenuItem(
                             text = { Text(text = category.name, color = Color(category.colour)) },
                             onClick = {
                                 onDropdownMenuClick(category.name)
                             }
                         )
-                    }
                 }
                 /*
                 DropdownMenuItem(

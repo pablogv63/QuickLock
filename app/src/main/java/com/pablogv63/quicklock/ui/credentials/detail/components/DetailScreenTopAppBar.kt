@@ -5,6 +5,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.pablogv63.quicklock.R
 
 @Composable
 fun DetailScreenTopAppBar(
@@ -18,7 +20,7 @@ fun DetailScreenTopAppBar(
             IconButton(onClick = onArrowBackClick) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Back"
+                    contentDescription = stringResource(id = R.string.topAppBar_back)
                 )
             }
         },
@@ -26,7 +28,7 @@ fun DetailScreenTopAppBar(
             IconButton(onClick = onEditClick) {
                 Icon(
                     imageVector = Icons.Filled.Edit,
-                    contentDescription = "Confirm"
+                    contentDescription = stringResource(id = R.string.topAppBar_confirm)
                 )
             }
         },

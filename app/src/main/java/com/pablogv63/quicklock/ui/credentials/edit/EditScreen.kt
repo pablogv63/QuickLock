@@ -3,15 +3,20 @@ package com.pablogv63.quicklock.ui.credentials.edit
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.navigation.compose.rememberNavController
+import com.pablogv63.quicklock.R
 import com.pablogv63.quicklock.ui.credentials.edit.components.EditScreenTopAppBar
 import com.pablogv63.quicklock.ui.credentials.form.FormEvent
 import com.pablogv63.quicklock.ui.credentials.form.FormState
@@ -27,7 +32,9 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.viewModel
 import org.koin.core.parameter.parametersOf
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalComposeUiApi
+@ExperimentalAnimationApi
+@ExperimentalMaterial3Api
 @Destination
 @Composable
 fun EditScreen(
@@ -41,6 +48,8 @@ fun EditScreen(
     val editState = viewModel.editState
     val context = LocalContext.current
 
+    val editToastText = "${formState.name} ${stringResource(id = R.string.editScreen_toast_edited)}"
+
     //Gets called when validation is a success
     LaunchedEffect(key1 = context) {
         viewModel.validationEvents.collect { event ->
@@ -48,7 +57,7 @@ fun EditScreen(
                 EditViewModel.ValidationEvent.Success -> {
                     Toast.makeText(
                         context,
-                        "${formState.name} edited successfully",
+                        editToastText,
                         Toast.LENGTH_LONG
                     ).show()
                     // Navigate back
@@ -60,17 +69,13 @@ fun EditScreen(
 
     Scaffold(
         topBar = { EditScreenTopAppBar(
-            title = "Edit ${formState.name}",
+            title = "${stringResource(id = R.string.editScreen_topAppBar_title)} ${formState.name}",
             onArrowBackClick = { navigator.navigateUp() },
             onCheckClick = { viewModel.onEvent(FormEvent.Submit) }
         ) },
         bottomBar = {
             QuickLockNavigationBar(
-                current = "CredentialsScreen",
-                navigator = navigator,
-                onSameClick = {
-                    navigator.navigate(CredentialsScreenDestination)
-                }
+                navigator = navigator
             )
         }
     ) { innerPadding ->
@@ -80,12 +85,18 @@ fun EditScreen(
             viewModel = viewModel,
             innerPadding = innerPadding,
             context = context,
-            navigateToGenerator = { navigator.navigate(GeneratorScreenDestination(true)) }
+            navigateToGenerator = { navigator.navigate(GeneratorScreenDestination(true)) },
+            navigateBack = {
+                navigator.popBackStack()
+                navigator.navigate(CredentialsScreenDestination)
+            }
         )
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalComposeUiApi
+@ExperimentalAnimationApi
+@ExperimentalMaterial3Api
 @Composable
 fun EditScreenContent(
     formState: FormState,
@@ -93,7 +104,8 @@ fun EditScreenContent(
     viewModel: EditViewModel,
     innerPadding: PaddingValues,
     context: Context,
-    navigateToGenerator: () -> Unit
+    navigateToGenerator: () -> Unit,
+    navigateBack: () -> Unit
 ){
     Column(
         modifier = Modifier
@@ -112,7 +124,7 @@ fun EditScreenContent(
                 viewModel.onEvent(FormEvent.NameChanged(it))
             },
             errorValue = formState.nameError,
-            label = "Name",
+            label = stringResource(id = R.string.field_name_label),
             keyboardType = KeyboardType.Text
         )
         Spacer(modifier = Modifier.height(AppPaddingValues.Medium))
@@ -123,7 +135,7 @@ fun EditScreenContent(
                 viewModel.onEvent(FormEvent.UsernameChanged(it))
             },
             errorValue = formState.usernameError,
-            label = "Username",
+            label = stringResource(id = R.string.field_username_label),
             keyboardType = KeyboardType.Email
         )
         Spacer(modifier = Modifier.height(AppPaddingValues.Medium))
@@ -135,7 +147,7 @@ fun EditScreenContent(
                 viewModel.onEvent(FormEvent.PasswordChanged(it))
             },
             errorValue = formState.passwordError,
-            label = "Password",
+            label = stringResource(id = R.string.field_password_label),
             keyboardType = KeyboardType.Password,
             trailingIcon = {
                 Row {
@@ -143,11 +155,11 @@ fun EditScreenContent(
                         Icon(
                             imageVector =
                             if (showAsPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = "See password"
+                            contentDescription = stringResource(id = R.string.field_password_see)
                         )
                     }
                     IconButton(onClick = navigateToGenerator) {
-                        Icon(imageVector = Icons.Filled.Sync, contentDescription = "Generate")
+                        Icon(imageVector = Icons.Filled.Sync, contentDescription = stringResource(id = R.string.field_password_generate))
                     }
                 }
             },
@@ -163,7 +175,7 @@ fun EditScreenContent(
                         viewModel.onEvent(FormEvent.RepeatedPasswordChanged(formState.password, it))
                     },
                     errorValue = formState.repeatedPasswordError,
-                    label = "Repeat password",
+                    label = stringResource(id = R.string.field_repeatPassword_label),
                     keyboardType = KeyboardType.Password,
                     trailingIcon = {
                         IconButton(onClick = {
@@ -172,7 +184,7 @@ fun EditScreenContent(
                             Icon(
                                 imageVector =
                                 if (showAsPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                                contentDescription = "See password"
+                                contentDescription = stringResource(id = R.string.field_password_see)
                             )
                         }
                     },
@@ -197,11 +209,11 @@ fun EditScreenContent(
                 viewModel.onEvent(FormEvent.ExpirationDateChanged(it))
             },
             errorValue = formState.expirationDateError,
-            label = "Expiration date",
+            label = stringResource(id = R.string.field_expirationDate_label),
             keyboardType = KeyboardType.Text,
             trailingIcon = {
                 IconButton(onClick = { expirationDatePickerDialog.show() }) {
-                    Icon(imageVector = Icons.Filled.Today, contentDescription = "Pick date")
+                    Icon(imageVector = Icons.Filled.Today, contentDescription = stringResource(id = R.string.field_expirationDate_pickDate))
                 }
             },
             readOnly = true
@@ -218,7 +230,10 @@ fun EditScreenContent(
         // Delete button
         Box(modifier = Modifier.fillMaxSize()) {
             FilledIconButton(
-                onClick = { viewModel.onEvent(EditEvent.Delete(editState.credentialId)) },
+                onClick = {
+                    viewModel.onEvent(EditEvent.Delete(editState.credentialId))
+                    navigateBack()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomEnd),
@@ -230,10 +245,10 @@ fun EditScreenContent(
                 Row {
                     Icon(
                         imageVector = Icons.Filled.Delete,
-                        contentDescription = "Delete"
+                        contentDescription = stringResource(id = R.string.editScreen_action_delete)
                     )
                     Spacer(modifier = Modifier.width(AppPaddingValues.Small))
-                    Text(text = "Delete")
+                    Text(text = stringResource(id = R.string.editScreen_action_delete))
                 }
             }
         }

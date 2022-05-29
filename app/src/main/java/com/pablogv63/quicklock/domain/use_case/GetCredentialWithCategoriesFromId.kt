@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 class GetCredentialWithCategoriesFromId(
     private val pairRepository: CredentialCategoryPairRepository
 ) {
-    operator fun invoke(id: Int): Flow<CredentialWithCategoryList>{
+    operator fun invoke(id: Int): Flow<CredentialWithCategoryList?>{
         return pairRepository.getCredentialWithCategoriesFromId(id)
     }
 }

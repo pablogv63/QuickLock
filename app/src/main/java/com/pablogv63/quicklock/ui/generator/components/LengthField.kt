@@ -20,7 +20,7 @@ const val MIN_LENGTH = 1f
 const val MAX_LENGTH = 30f
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
 @Composable
 fun LengthField(
     title: String,
@@ -113,6 +113,7 @@ fun inRange(value: Float): Boolean{
     return value in MIN_LENGTH..MAX_LENGTH
 }
 
+@ExperimentalMaterial3Api
 @Preview
 @Composable
 fun PreviewLengthField(){

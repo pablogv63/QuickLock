@@ -2,6 +2,7 @@ package com.pablogv63.quicklock.ui.settings
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,18 +14,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.navigation.compose.rememberNavController
+import com.pablogv63.quicklock.R
+import com.pablogv63.quicklock.ui.navigation.NavBarDestination
 import com.pablogv63.quicklock.ui.navigation.QuickLockNavigationBar
 import com.pablogv63.quicklock.ui.tools.Tools.dataStore
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import de.schnettler.datastore.compose.material3.PreferenceScreen
 import de.schnettler.datastore.compose.material3.model.Preference
-import de.schnettler.datastore.manager.PreferenceRequest
 import org.koin.androidx.compose.getViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalComposeUiApi
+@ExperimentalAnimationApi
+@ExperimentalMaterial3Api
 @Destination
 @Composable
 fun SettingsScreen(
@@ -39,8 +44,8 @@ fun SettingsScreen(
         },
         bottomBar = {
             QuickLockNavigationBar(
-                current = "SettingsScreen",
-                navigator = navigator
+                navigator = navigator,
+                currentDestination = NavBarDestination.Settings
             )
         }
     ) { innerPadding ->
@@ -54,7 +59,9 @@ fun SettingsScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@ExperimentalComposeUiApi
+@ExperimentalAnimationApi
+@ExperimentalMaterial3Api
 @Composable
 fun SettingsScreenContent(
     viewModel: SettingsViewModel
@@ -62,13 +69,17 @@ fun SettingsScreenContent(
     val context = LocalContext.current
 
     // Save
-    val exportLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.CreateDocument()) { uri ->
+    val exportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument()
+    ) { uri ->
         if (uri != null){
             viewModel.onEvent(SettingsEvent.ExportDatabase(context, uri))
         }
     }
     // Load
-    val importLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri ->
+    val importLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
         if (uri != null){
             viewModel.onEvent(SettingsEvent.ImportDatabase(context, uri))
         }
@@ -77,36 +88,37 @@ fun SettingsScreenContent(
     PreferenceScreen(
         items = listOf(
             Preference.PreferenceGroup(
-                title = "Tools",
+                title = stringResource(id = R.string.settingsScreen_tools),
                 enabled = true,
                 listOf(
                     Preference.PreferenceItem.TextPreference(
-                        title = "Save database",
-                        summary = "Save database to a JSON file",
+                        title = stringResource(id = R.string.settingsScreen_saveDatabase_json_title),
+                        onClick = {
+                            exportLauncher.launch("QuickLockDatabase.json")
+                        },
+                        summary = stringResource(id = R.string.settingsScreen_saveDatabase_json_summary),
                         singleLineTitle = true,
                         icon = {
                             Icon(
                                 imageVector = Icons.Outlined.Save,
-                                contentDescription = "Save",
+                                contentDescription = stringResource(id = R.string.settingsScreen_saveDatabase_json_title),
                                 modifier = Modifier.padding(8.dp)
                             )
-                        },
-                        onClick = {
-                            exportLauncher.launch("QuickLockDatabase.json")
                         }
                     ),
                     Preference.PreferenceItem.TextPreference(
-                        title = "Load database",
-                        summary = "Load database from a JSON file",
+                        title = stringResource(id = R.string.settingsScreen_loadDatabase_json_title),
+                        onClick = {
+                            importLauncher.launch("application/json")
+                        },
+                        summary = stringResource(id = R.string.settingsScreen_loadDatabase_json_summary),
                         singleLineTitle = true,
                         icon = {
                             Icon(
                                 imageVector = Icons.Outlined.UploadFile,
-                                contentDescription = "Save",
+                                contentDescription = stringResource(id = R.string.settingsScreen_loadDatabase_json_title),
                                 modifier = Modifier.padding(8.dp)
                             )
-                        }, onClick = {
-                            importLauncher.launch("application/json")
                         }
                     )
                 )
@@ -114,30 +126,5 @@ fun SettingsScreenContent(
         ),
         dataStore = context.dataStore,
         statusBarPadding = true
-    )
-}
-
-/**
- * Represents the Preference to choose if backup
- * TODO: Decide if backup is a choice
- */
-fun backupPreference(): Preference.PreferenceItem<Boolean>{
-    val backupRequest = PreferenceRequest<Boolean>(
-        key = booleanPreferencesKey("backup"),
-        defaultValue = true
-    )
-
-    return Preference.PreferenceItem.SwitchPreference(
-        request = backupRequest,
-        title = "Backup Preference",
-        summary = "Choosing if backup",
-        singleLineTitle = true,
-        icon = {
-            Icon(
-                imageVector = Icons.Outlined.Save,
-                contentDescription = null,
-                modifier = Modifier.padding(8.dp)
-            )
-        }
     )
 }

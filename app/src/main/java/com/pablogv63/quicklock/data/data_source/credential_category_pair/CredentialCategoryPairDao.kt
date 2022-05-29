@@ -17,11 +17,17 @@ interface CredentialCategoryPairDao {
     @Query("Select * From credentialcategorypair")
     fun getCredentialCategoryPairs(): Flow<List<CredentialCategoryPair>>
 
+    @Query("Select * From credentialcategorypair where credentialId=:credentialId")
+    fun getCredentialCategoryPairsFromId(credentialId: Int): Flow<List<CredentialCategoryPair>>
+
+    @Query("Delete From credentialcategorypair where credentialId=:credentialId")
+    fun deleteCredentialCategoryPairsFromId(credentialId: Int)
+
     @Transaction
     @Query("Select * From credential")
     fun getCredentialsWithCategories(): Flow<List<CredentialWithCategoryList>>
 
     @Transaction
     @Query("Select * From credential where credentialId=:credentialId")
-    fun getCredentialWithCategoriesFromId(credentialId: Int): Flow<CredentialWithCategoryList>
+    fun getCredentialWithCategoriesFromId(credentialId: Int): Flow<CredentialWithCategoryList?>
 }

@@ -19,11 +19,19 @@ class GetCredentialsWithCategories(
                 is OrderType.Ascending -> {
                     when(credentialOrder) {
                         is CredentialOrder.Name -> credentials.sortedBy { it.credential.name.lowercase() }
+                        is CredentialOrder.Username -> credentials.sortedBy { it.credential.username.lowercase() }
+                        is CredentialOrder.ExpirationDate -> credentials.sortedBy { it.credential.expirationDate }
+                        is CredentialOrder.LastAccessed -> credentials.sortedBy { it.credential.lastAccess }
+                        is CredentialOrder.LastModified -> credentials.sortedBy { it.credential.lastModified }
                     }
                 }
                 is OrderType.Descending -> {
                     when(credentialOrder) {
                         is CredentialOrder.Name -> credentials.sortedByDescending { it.credential.name.lowercase() }
+                        is CredentialOrder.Username -> credentials.sortedByDescending { it.credential.username.lowercase() }
+                        is CredentialOrder.ExpirationDate -> credentials.sortedByDescending { it.credential.expirationDate }
+                        is CredentialOrder.LastAccessed -> credentials.sortedByDescending { it.credential.lastAccess }
+                        is CredentialOrder.LastModified -> credentials.sortedByDescending { it.credential.lastModified }
                     }
                 }
             }

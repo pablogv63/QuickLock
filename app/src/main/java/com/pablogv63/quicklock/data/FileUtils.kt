@@ -42,10 +42,6 @@ object FileUtils {
             contentResolver.openFileDescriptor(uri, "w")?.use { parcelFileDescriptor ->
                 FileOutputStream(parcelFileDescriptor.fileDescriptor).use {
                     csvWriter().writeAll(rows, it)
-                    /*it.write(
-                        ("Overwritten at ${System.currentTimeMillis()}\n")
-                            .toByteArray()
-                    )*/
                 }
             }
         } catch (e: FileNotFoundException) {

@@ -15,11 +15,15 @@ class CredentialCategoryPairRepositoryImpl(
         return dao.getCredentialCategoryPairs()
     }
 
+    override fun getAllFromId(credentialId: Int): Flow<List<CredentialCategoryPair>> {
+        return dao.getCredentialCategoryPairsFromId(credentialId)
+    }
+
     override fun getCredentialsWithCategories(): Flow<List<CredentialWithCategoryList>> {
         return dao.getCredentialsWithCategories()
     }
 
-    override fun getCredentialWithCategoriesFromId(credentialId: Int): Flow<CredentialWithCategoryList> {
+    override fun getCredentialWithCategoriesFromId(credentialId: Int): Flow<CredentialWithCategoryList?> {
         return dao.getCredentialWithCategoriesFromId(credentialId)
     }
 
@@ -33,5 +37,9 @@ class CredentialCategoryPairRepositoryImpl(
 
     override suspend fun deleteCredentialCategoryPair(credentialCategoryPair: CredentialCategoryPair) {
         withContext(Dispatchers.IO) { dao.delete(credentialCategoryPair) }
+    }
+
+    override suspend fun deleteCredentialWithCategoriesFromId(credentialId: Int) {
+        withContext(Dispatchers.IO) { dao.deleteCredentialCategoryPairsFromId(credentialId) }
     }
 }

@@ -1,5 +1,7 @@
 package com.pablogv63.quicklock.ui.navigation
 
+import androidx.annotation.StringRes
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Settings
@@ -7,57 +9,84 @@ import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Sync
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.pablogv63.quicklock.R
+import com.pablogv63.quicklock.ui.NavGraphs
+import com.pablogv63.quicklock.ui.appCurrentDestinationAsState
 import com.pablogv63.quicklock.ui.destinations.*
+import com.pablogv63.quicklock.ui.startAppDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.navigate
+import com.ramcosta.composedestinations.navigation.navigateTo
+import com.ramcosta.composedestinations.spec.Direction
+import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 
+@ExperimentalMaterial3Api
+@ExperimentalAnimationApi
+@ExperimentalComposeUiApi
 @Composable
 fun QuickLockNavigationBar(
-    current: String,
     navigator: DestinationsNavigator,
+    currentDestination: NavBarDestination? = null,
     onSameClick: () -> Unit = {}
 ) {
-    val items = listOf("Credentials", "Generator", "Settings")
-    val destinations = listOf(
-        { navigator.navigate(CredentialsScreenDestination) },
-        { navigator.navigate(GeneratorScreenDestination()) },
-        { navigator.navigate(SettingsScreenDestination) }
-    )
-    var selectedItem = items.indexOfFirst { current.contains(it) }
-    val filledIcons = listOf(
-        Icons.Filled.Lock, Icons.Filled.Sync,
-        Icons.Filled.Settings
-    )
-    val outlinedIcons = listOf(
-        Icons.Outlined.Lock, Icons.Outlined.Sync,
-        Icons.Outlined.Settings
-    )
-
     NavigationBar {
-        items.forEachIndexed { index, item ->
-            val selected = selectedItem == index
-            val label: @Composable() ()->Unit = { Text(item) }
+        NavBarDestination.values().forEach { destination ->
+            val selected = currentDestination == destination
             NavigationBarItem(
-                icon = {
-                    Icon(
-                        if (selected) filledIcons[index] else outlinedIcons[index],
-                        contentDescription = null
-                    )
-                },
-                label = if (selected) label else null,
                 selected = selected,
-                onClick =
-                if (!selected) {
-                    {
-                        selectedItem = index
-                        destinations[index]()
+                onClick = {
+                    onSameClick()
+                    // This line makes the direction to navigate the only one in the current graph
+                    // This means that back button will close the app
+                    navigator.popBackStack()
+                    navigator.navigate(destination.direction) {
+                        launchSingleTop = true
                     }
-                } else onSameClick
+                },
+                icon = {
+                    val imageVector = if (selected) destination.filledIcon else destination.outlinedIcon
+                    Icon(imageVector = imageVector, contentDescription = stringResource(
+                        id = destination.label
+                    ))
+                },
+                label = { Text(text = stringResource(id = destination.label)) }
             )
         }
     }
+}
+
+@ExperimentalMaterial3Api
+@ExperimentalAnimationApi
+@ExperimentalComposeUiApi
+enum class NavBarDestination(
+    val direction: Direction,
+    val filledIcon: ImageVector,
+    val outlinedIcon: ImageVector,
+    @StringRes val label: Int
+){
+    Credentials(
+        CredentialsScreenDestination,
+        Icons.Filled.Lock,
+        Icons.Outlined.Lock,
+        R.string.navigationBar_credentials
+    ),
+    Generator(
+        GeneratorScreenDestination(),
+        Icons.Filled.Sync,
+        Icons.Outlined.Sync,
+        R.string.navigationBar_generator
+    ),
+    Settings(
+        SettingsScreenDestination,
+        Icons.Filled.Settings,
+        Icons.Outlined.Settings,
+        R.string.navigationBar_settings
+    )
 }

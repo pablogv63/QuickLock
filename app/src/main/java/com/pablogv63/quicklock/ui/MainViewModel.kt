@@ -33,7 +33,7 @@ class MainViewModel(
     init {
         //TODO: Debug purposes only
         viewModelScope.launch(Dispatchers.IO){
-            db.clearAllTables()
+            /*db.clearAllTables()
             val creds = sampleCreds()
             val cats = sampleCategories()
             val credentialsWithCategories: MutableList<CredentialWithCategoryList> = mutableListOf()
@@ -71,6 +71,8 @@ class MainViewModel(
                 credentialUseCases.addCredentialWithCategories(it)
             }
             list = credentialsWithCategories
+
+             */
         }
     }
 

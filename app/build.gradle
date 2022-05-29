@@ -56,14 +56,6 @@ android {
     }
 }
 
-// https://chetangupta.net/db-to-csv/
-configurations {
-    all {
-        // resolves conflicts of openCSV with platform common-logging
-        exclude module: 'commons-logging'
-    }
-}
-
 dependencies {
 
     /* General app dependencies */

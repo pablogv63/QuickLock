@@ -1,3 +1,80 @@
 <resources>
     <string name="app_name">QuickLock</string>
+
+    <!-- TopAppBar common -->
+    <string name="topAppBar_back">Back</string>
+    <string name="topAppBar_confirm">Confirm</string>
+
+    <!-- Navigation Bar -->
+    <string name="navigationBar_credentials">Credentials</string>
+    <string name="navigationBar_generator">Generator</string>
+    <string name="navigationBar_settings">Settings</string>
+
+
+    <!-- AddScreen -->
+    <string name="addScreen_toast_added">added successfully</string>
+    <string name="addScreen_topAppBar_title">New credential</string>
+
+    <!-- Field common -->
+    <string name="field_name_label">Name</string>
+    <string name="field_username_label">Username</string>
+    <string name="field_password_label">Password</string>
+    <string name="field_password_see">See password</string>
+    <string name="field_password_generate">Generate</string>
+    <string name="field_repeatPassword_label">Repeat password</string>
+    <string name="field_expirationDate_label">Expiration Date</string>
+    <string name="field_optional">*Optional</string>
+    <string name="field_expirationDate_pickDate">Pick date</string>
+    <string name="field_categories_label">Categories</string>
+    <string name="field_categories_empty">None</string>
+    <string name="field_expirationDate_empty">None</string>
+    <string name="field_expirationDate_expiresSoon">Expires soon</string>
+    <string name="field_lastModified_label">Last modified</string>
+    <string name="field_lastAccessed_label">Last access</string>
+    <string name="field_category_label">Category</string>
+
+    <!-- Copy actions -->
+    <string name="action_copy_username">Copy username</string>
+    <string name="action_copy_password">Copy password</string>
+
+    <!-- EditScreen -->
+    <string name="editScreen_toast_edited">edited successfully</string>
+    <string name="editScreen_topAppBar_title">Edit</string>
+    <string name="editScreen_action_delete">Delete</string>
+
+    <!-- Search -->
+    <string name="search_bar_clear">Clear</string>
+    <string name="search_noMatches">No matches found</string>
+    <string name="search_title">Search</string>
+    <string name="search_bar_placeholder">Search...</string>
+
+    <!-- Order -->
+    <string name="order_orderBy">Order by</string>
+    <string name="order_orderedBy">Ordered by</string>
+    <string name="order_ascending">Ascending</string>
+    <string name="order_descending">Descending</string>
+
+    <!-- CredentialsScreen -->
+    <string name="credentialsScreen_filter_title">Filter</string>
+    <string name="credentialsScreen_addFAB_title">Add credential</string>
+    <string name="credentialsScreen_toast_copiedUsername">Username copied to clipboard</string>
+    <string name="credentialsScreen_toast_copiedPassword">Password copied to clipboard</string>
+
+    <!-- GeneratorScreen -->
+    <string name="generatorScreen_regenerate">Regenerate</string>
+    <string name="generatorScreen_title">Password generator</string>
+    <string name="generatorScreen_length">Length</string>
+    <string name="generatorScreen_uppercase">Uppercase (A-Z)</string>
+    <string name="generatorScreen_lowercase">Lowercase (a-z)</string>
+    <string name="generatorScreen_numbers">Numbers (0–9)</string>
+    <string name="generatorScreen_specialChars">Special characters (!@#$%^&amp;*€)</string>
+
+    <!-- SettingsScreen -->
+    <string name="settingsScreen_tools">Tools</string>
+    <string name="settingsScreen_saveDatabase_json_title">Save database</string>
+    <string name="settingsScreen_saveDatabase_json_summary">Save database to a JSON file</string>
+    <string name="settingsScreen_loadDatabase_json_title">Load database</string>
+    <string name="settingsScreen_loadDatabase_json_summary">Load database from a JSON file</string>
+
+
 </resources>

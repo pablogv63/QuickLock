@@ -3,28 +3,32 @@ package com.pablogv63.quicklock.ui.credentials.add
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material.icons.filled.Today
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
+import com.pablogv63.quicklock.R
 import com.pablogv63.quicklock.ui.credentials.add.components.AddScreenTopAppBar
-import com.pablogv63.quicklock.ui.credentials.edit.EditScreenContent
 import com.pablogv63.quicklock.ui.credentials.form.FormEvent
 import com.pablogv63.quicklock.ui.credentials.form.FormState
 import com.pablogv63.quicklock.ui.credentials.form.components.CategoryDropdownMenu
 import com.pablogv63.quicklock.ui.credentials.form.components.ExpirationDatePickerDialog
 import com.pablogv63.quicklock.ui.credentials.form.components.Field
-import com.pablogv63.quicklock.ui.destinations.AddScreenDestination
-import com.pablogv63.quicklock.ui.destinations.CredentialsScreenDestination
 import com.pablogv63.quicklock.ui.destinations.GeneratorScreenDestination
 import com.pablogv63.quicklock.ui.navigation.QuickLockNavigationBar
 import com.pablogv63.quicklock.ui.tools.AppPaddingValues
@@ -32,7 +36,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.getViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
+@ExperimentalComposeUiApi
+@ExperimentalAnimationApi
 @Destination
 @Composable
 fun AddScreen(
@@ -43,6 +49,9 @@ fun AddScreen(
     val addState = viewModel.addState
     val context = LocalContext.current
 
+    // Text
+    val addedToastText = stringResource(id = R.string.addScreen_toast_added)
+
     //Gets called when validation is a success
     LaunchedEffect(key1 = context) {
         viewModel.validationEvents.collect { event ->
@@ -50,7 +59,7 @@ fun AddScreen(
                 AddViewModel.ValidationEvent.Success -> {
                     Toast.makeText(
                         context,
-                        "${formState.name} added successfully",
+                        "${formState.name} $addedToastText",
                         Toast.LENGTH_LONG
                     ).show()
                     // Navigate back
@@ -62,17 +71,13 @@ fun AddScreen(
 
     Scaffold(
         topBar = { AddScreenTopAppBar(
-            title = "New credential",
+            title = stringResource(id = R.string.addScreen_topAppBar_title),
             onArrowBackClick = { navigator.navigateUp() },
             onCheckClick = { viewModel.onEvent(FormEvent.Submit) }
         ) },
         bottomBar = {
             QuickLockNavigationBar(
-                current = "CredentialsScreen",
-                navigator = navigator,
-                onSameClick = {
-                    navigator.navigate(CredentialsScreenDestination)
-                }
+                navigator = navigator
             )
         }
     ) { innerPadding ->
@@ -89,6 +94,9 @@ fun AddScreen(
     }
 }
 
+@ExperimentalMaterial3Api
+@ExperimentalAnimationApi
+@ExperimentalComposeUiApi
 @Composable
 fun AddScreenContent(
     formState: FormState,
@@ -115,7 +123,7 @@ fun AddScreenContent(
                 viewModel.onEvent(FormEvent.NameChanged(it))
             },
             errorValue = formState.nameError,
-            label = "Name",
+            label = stringResource(id = R.string.field_name_label),
             keyboardType = KeyboardType.Text
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -126,7 +134,7 @@ fun AddScreenContent(
                 viewModel.onEvent(FormEvent.UsernameChanged(it))
             },
             errorValue = formState.usernameError,
-            label = "Username",
+            label = stringResource(id = R.string.field_username_label),
             keyboardType = KeyboardType.Email
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -138,7 +146,7 @@ fun AddScreenContent(
                 viewModel.onEvent(FormEvent.PasswordChanged(it))
             },
             errorValue = formState.passwordError,
-            label = "Password",
+            label = stringResource(id = R.string.field_password_label),
             keyboardType = KeyboardType.Password,
             trailingIcon = {
                 Row {
@@ -146,11 +154,11 @@ fun AddScreenContent(
                         Icon(
                             imageVector =
                             if (showAsPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = "See password"
+                            contentDescription = stringResource(id = R.string.field_password_see)
                         )
                     }
                     IconButton(onClick = navigateToGenerator) {
-                        Icon(imageVector = Icons.Filled.Sync, contentDescription = "Generate")
+                        Icon(imageVector = Icons.Filled.Sync, contentDescription = stringResource(id = R.string.field_password_generate))
                     }
                 }
             },
@@ -167,14 +175,14 @@ fun AddScreenContent(
                         viewModel.onEvent(FormEvent.RepeatedPasswordChanged(formState.password, it))
                     },
                     errorValue = formState.repeatedPasswordError,
-                    label = "Repeat password",
+                    label = stringResource(id = R.string.field_repeatPassword_label),
                     keyboardType = KeyboardType.Password,
                     trailingIcon = {
                         IconButton(onClick = { showRepeatedAsPassword = !showRepeatedAsPassword }) {
                             Icon(
                                 imageVector =
                                 if (showRepeatedAsPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                                contentDescription = "See password"
+                                contentDescription = stringResource(id = R.string.field_password_see)
                             )
                         }
                     },
@@ -199,12 +207,12 @@ fun AddScreenContent(
                 viewModel.onEvent(FormEvent.ExpirationDateChanged(it))
             },
             errorValue = formState.expirationDateError,
-            label = "Expiration date",
-            supportiveText = "*Optional",
+            label = stringResource(id = R.string.field_expirationDate_label),
+            supportiveText = stringResource(id = R.string.field_optional),
             keyboardType = KeyboardType.Text,
             trailingIcon = {
                 IconButton(onClick = { expirationDatePickerDialog.show() }) {
-                    Icon(imageVector = Icons.Filled.Today, contentDescription = "Pick date")
+                    Icon(imageVector = Icons.Filled.Today, contentDescription = stringResource(id = R.string.field_expirationDate_pickDate))
                 }
             },
             readOnly = true

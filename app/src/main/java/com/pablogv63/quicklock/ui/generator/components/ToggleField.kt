@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.pablogv63.quicklock.ui.tools.AppPaddingValues
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
 @Composable
 fun ToggleField(
     title: String,
@@ -52,6 +52,7 @@ fun ToggleField(
     }
 }
 
+@ExperimentalMaterial3Api
 @Preview
 @Composable
 fun PreviewToggleField(){

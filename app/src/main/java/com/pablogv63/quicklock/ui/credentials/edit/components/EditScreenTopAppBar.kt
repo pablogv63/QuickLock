@@ -7,6 +7,8 @@ import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.pablogv63.quicklock.R
 
 @Composable
 fun EditScreenTopAppBar(
@@ -20,7 +22,7 @@ fun EditScreenTopAppBar(
             IconButton(onClick = onArrowBackClick) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Back"
+                    contentDescription = stringResource(id = R.string.topAppBar_back)
                 )
             }
         },
@@ -28,7 +30,7 @@ fun EditScreenTopAppBar(
             IconButton(onClick = onCheckClick) {
                 Icon(
                     imageVector = Icons.Filled.Check,
-                    contentDescription = "Confirm"
+                    contentDescription = stringResource(id = R.string.topAppBar_confirm)
                 )
             }
         },
