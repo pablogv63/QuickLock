@@ -30,45 +30,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pablogv63.quicklock.R
 
-@ExperimentalAnimationApi
-@ExperimentalComposeUiApi
-@Composable
-fun SearchBarUI(
-    searchText: String,
-    placeholderText: String = "",
-    onSearchTextChanged: (String) -> Unit = {},
-    onClearClick: () -> Unit = {},
-    onNavigateBack: () -> Unit = {},
-    matchesFound: Boolean,
-    results: @Composable () -> Unit = {}
-) {
-
-    Box {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-
-            SearchBar(
-                searchText,
-                placeholderText,
-                onSearchTextChanged,
-                onClearClick,
-                onNavigateBack
-            )
-
-            if (matchesFound) {
-                results()
-            } else {
-                if (searchText.isNotEmpty()) {
-                    NoSearchResults()
-                }
-            }
-        }
-
-    }
-}
-
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @Composable

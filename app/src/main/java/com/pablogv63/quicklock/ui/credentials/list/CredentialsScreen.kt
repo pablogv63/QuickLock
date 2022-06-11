@@ -140,6 +140,9 @@ fun CredentialsScreen(
                     bottom = innerPadding.calculateBottomPadding()
                 )
         ) {
+            if (state.isSearchBarVisible and state.matchedCredentialsWithCategories.isEmpty()){
+                NoSearchResults()
+            }
 
             LazyColumn(
                 state = listState,
@@ -152,7 +155,6 @@ fun CredentialsScreen(
                     CredentialItem(
                         credentialWithCategoryList = credentialWithCategories,
                         onItemClick = {
-                            viewModel.onEvent(CredentialsEvent.CredentialAccessed(credentialWithCategories.credential))
                             navigator.navigate(DetailScreenDestination(
                                 credentialId = credentialWithCategories.credential.credentialId))
                         },

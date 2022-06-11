@@ -17,6 +17,7 @@ data class FormState(
     val category: String = "",
     val categoryError: String? = null,
     val categories: List<Category> = emptyList(),
+    val selectedCategories: List<Category> = emptyList(),
     val originalPassword: String = "",
     val passwordTextChanged: Boolean = false,
 )

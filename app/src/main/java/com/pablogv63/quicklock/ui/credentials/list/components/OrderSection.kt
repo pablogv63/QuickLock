@@ -8,11 +8,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.flowlayout.FlowRow
 import com.pablogv63.quicklock.R
 import com.pablogv63.quicklock.domain.util.CredentialOrder
 import com.pablogv63.quicklock.domain.util.OrderType
 import com.pablogv63.quicklock.ui.tools.AppPaddingValues
 
+@ExperimentalMaterial3Api
 @Composable
 fun OrderSection(
     modifier: Modifier = Modifier,
@@ -22,7 +24,7 @@ fun OrderSection(
     Column(
         modifier = modifier
     ) {
-        Row(
+        FlowRow(
             modifier = Modifier.fillMaxWidth()
         ) {
             DefaultRadioButton(
@@ -42,10 +44,6 @@ fun OrderSection(
                 selected = credentialOrder is CredentialOrder.ExpirationDate,
                 onSelect = { onOrderChange(CredentialOrder.ExpirationDate(credentialOrder.orderType)) }
             )
-        }
-        Row (
-            modifier = Modifier.fillMaxWidth()
-                ){
             DefaultRadioButton(
                 text = stringResource(id = R.string.field_lastModified_label),
                 selected = credentialOrder is CredentialOrder.LastModified,
@@ -58,7 +56,10 @@ fun OrderSection(
                 onSelect = { onOrderChange(CredentialOrder.LastAccessed(credentialOrder.orderType)) }
             )
         }
-        Divider(color = MaterialTheme.colorScheme.surfaceVariant)
+        Divider(
+            color = MaterialTheme.colorScheme.surfaceVariant,
+            startIndent = AppPaddingValues.Small
+        )
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -81,7 +82,7 @@ fun OrderSection(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
 @Composable
 fun DefaultRadioButton(
     text: String,
@@ -106,6 +107,7 @@ fun DefaultRadioButton(
     }
 }
 
+@ExperimentalMaterial3Api
 @Preview
 @Composable
 fun PreviewOrderSection(){

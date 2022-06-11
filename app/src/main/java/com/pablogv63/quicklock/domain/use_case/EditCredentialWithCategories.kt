@@ -20,6 +20,7 @@ class EditCredentialWithCategories(
         val categoryList = credentialWithCategoryList.categories
         categoryRepository.insertAll(categoryList)
         // Update credential category pairs
+        credentialCategoryPairRepository.deleteCredentialWithCategoriesFromId(credential.credentialId)
         categoryList.map { category ->
             val pair = CredentialCategoryPair(
                 credentialId = newCredentialId.toInt(),
@@ -27,5 +28,6 @@ class EditCredentialWithCategories(
             )
             credentialCategoryPairRepository.insertCredentialCategoryPair(pair)
         }
+
     }
 }

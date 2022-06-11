@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -21,6 +22,7 @@ import com.pablogv63.quicklock.ui.navigation.QuickLockNavigationBar
 import com.pablogv63.quicklock.ui.tools.AppPaddingValues
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.result.ResultBackNavigator
 import org.koin.androidx.compose.getViewModel
 
 @ExperimentalAnimationApi
@@ -31,7 +33,8 @@ import org.koin.androidx.compose.getViewModel
 fun GeneratorScreen(
     viewModel: GeneratorViewModel = getViewModel(),
     navigator: DestinationsNavigator,
-    fromCredentialView: Boolean = false
+    fromCredentialView: Boolean = false,
+    resultNavigator: ResultBackNavigator<String>
 ) {
     val state = viewModel.generatorState
     Scaffold(
@@ -43,6 +46,16 @@ fun GeneratorScreen(
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = stringResource(id = R.string.topAppBar_back)
+                        )
+                    }
+                },
+                actions = {
+                    if (fromCredentialView) IconButton(onClick = {
+                        resultNavigator.navigateBack(state.generatedPassword)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Check,
+                            contentDescription = stringResource(id = R.string.topAppBar_confirm)
                         )
                     }
                 }

@@ -3,8 +3,10 @@ package com.pablogv63.quicklock.ui.credentials.add
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pablogv63.quicklock.domain.model.Category
 import com.pablogv63.quicklock.domain.model.Credential
 import com.pablogv63.quicklock.domain.model.CredentialWithCategoryList
 import com.pablogv63.quicklock.domain.use_case.CredentialUseCases
@@ -89,14 +91,30 @@ class AddViewModel(
                     expirationDateError = expirationDateResult.errorMessage
                 )
             }
-            is FormEvent.CategoryChanged -> {
-                val categoryResult = formUseCases.validateCategory.invoke(
-                    categoryName = formEvent.category,
-                    list = formState.categories
-                )
+            is FormEvent.CategorySelected -> {
+                val currentCategories = formState.selectedCategories.toMutableList()
+                currentCategories.add(formEvent.category)
                 formState = formState.copy(
-                    category = formEvent.category,
-                    categoryError = categoryResult.errorMessage
+                    selectedCategories = currentCategories.toList()
+                )
+            }
+            is FormEvent.CategoryRemoved -> {
+                val currentCategories = formState.selectedCategories.toMutableList()
+                currentCategories.remove(formEvent.category)
+                formState = formState.copy(
+                    selectedCategories = currentCategories.toList()
+                )
+            }
+            is FormEvent.NewCategory -> {
+                // Add category to list
+                val currentCategories = formState.categories.toMutableList()
+                val selectedCategories = formState.selectedCategories.toMutableList()
+                val newCategory = Category(name = formEvent.name, colour = formEvent.color.toArgb())
+                currentCategories.add(newCategory)
+                selectedCategories.add(newCategory)
+                formState = formState.copy(
+                    categories = currentCategories,
+                    selectedCategories = selectedCategories
                 )
             }
             is FormEvent.Submit -> {
@@ -113,7 +131,6 @@ class AddViewModel(
             formState.password, formState.repeatedPassword
         )
         val expirationDateResult = formUseCases.validateExpirationDate(formState.expirationDate)
-        val categoryResult = formUseCases.validateCategory(formState.category, formState.categories)
 
         formState = formState.copy(
             nameError = nameResult.errorMessage,
@@ -121,7 +138,6 @@ class AddViewModel(
             passwordError = passwordResult.errorMessage,
             repeatedPasswordError = repeatedPasswordResult.errorMessage,
             expirationDateError = expirationDateResult.errorMessage,
-            categoryError = categoryResult.errorMessage
         )
 
         val hasError = listOf(
@@ -129,8 +145,7 @@ class AddViewModel(
             usernameResult,
             passwordResult,
             repeatedPasswordResult,
-            expirationDateResult,
-            categoryResult
+            expirationDateResult
         ).any { !it.successful }
         if (hasError) { return }
 
@@ -142,11 +157,6 @@ class AddViewModel(
     }
 
     private fun stateToCredentialWithCategoryList(): CredentialWithCategoryList {
-        val categories =
-            if (formState.category.isBlank())
-                listOf()
-            else
-                listOf(formState.categories.first { formState.category == it.name })
         return CredentialWithCategoryList(
             Credential(
                 credentialId = 0,
@@ -157,7 +167,7 @@ class AddViewModel(
                 lastModified = LocalDate.now(),
                 lastAccess = LocalDate.now()
             ),
-            categories = categories
+            categories = formState.selectedCategories
         )
     }
 

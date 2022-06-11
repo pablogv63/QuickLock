@@ -15,12 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.navigation.compose.rememberNavController
 import com.pablogv63.quicklock.R
 import com.pablogv63.quicklock.ui.credentials.edit.components.EditScreenTopAppBar
 import com.pablogv63.quicklock.ui.credentials.form.FormEvent
 import com.pablogv63.quicklock.ui.credentials.form.FormState
-import com.pablogv63.quicklock.ui.credentials.form.components.CategoryDropdownMenu
+import com.pablogv63.quicklock.ui.credentials.form.components.CategoryChipList
 import com.pablogv63.quicklock.ui.credentials.form.components.ExpirationDatePickerDialog
 import com.pablogv63.quicklock.ui.credentials.form.components.Field
 import com.pablogv63.quicklock.ui.destinations.CredentialsScreenDestination
@@ -29,6 +28,8 @@ import com.pablogv63.quicklock.ui.navigation.QuickLockNavigationBar
 import com.pablogv63.quicklock.ui.tools.AppPaddingValues
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.result.NavResult
+import com.ramcosta.composedestinations.result.ResultRecipient
 import org.koin.androidx.compose.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -39,11 +40,30 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun EditScreen(
     navigator: DestinationsNavigator,
-    credentialId: Int
+    credentialId: Int,
+    resultRecipient: ResultRecipient<GeneratorScreenDestination,String>
 ){
     val viewModel: EditViewModel by viewModel {
         parametersOf(credentialId)
     }
+    // Update password from Generator view
+    resultRecipient.onNavResult { result ->
+        when (result) {
+            is NavResult.Canceled -> {
+                // Cancelled (no value)
+                // In this case: do nothing
+            }
+            is NavResult.Value -> {
+                // Update password and repeated password field
+                viewModel.onEvent(FormEvent.PasswordChanged(result.value))
+                viewModel.onEvent(FormEvent.RepeatedPasswordChanged(
+                    password = result.value,
+                    repeatedPassword = result.value
+                ))
+            }
+        }
+    }
+
     val formState = viewModel.formState
     val editState = viewModel.editState
     val context = LocalContext.current
@@ -220,12 +240,12 @@ fun EditScreenContent(
         )
         Spacer(modifier = Modifier.height(AppPaddingValues.Medium))
         // Category
-        CategoryDropdownMenu(
-            categoryName = formState.category,
-            onValueChange = { viewModel.onEvent(FormEvent.CategoryChanged(it)) },
+        CategoryChipList(
             categories = formState.categories,
-            onDropdownMenuClick = { viewModel.onEvent(FormEvent.CategoryChanged(it)) },
-            fromEdit = true
+            selectedCategories = formState.selectedCategories,
+            onChipClick = { viewModel.onEvent(FormEvent.CategorySelected(it)) },
+            onNewCategory = { name, category -> viewModel.onEvent(FormEvent.NewCategory(name,category)) },
+            onRemoveCategoryClick = { viewModel.onEvent(FormEvent.CategoryRemoved(it)) }
         )
         // Delete button
         Box(modifier = Modifier.fillMaxSize()) {

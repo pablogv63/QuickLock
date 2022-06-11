@@ -21,12 +21,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
 import com.pablogv63.quicklock.R
 import com.pablogv63.quicklock.ui.credentials.add.components.AddScreenTopAppBar
 import com.pablogv63.quicklock.ui.credentials.form.FormEvent
 import com.pablogv63.quicklock.ui.credentials.form.FormState
-import com.pablogv63.quicklock.ui.credentials.form.components.CategoryDropdownMenu
+import com.pablogv63.quicklock.ui.credentials.form.components.CategoryChipList
 import com.pablogv63.quicklock.ui.credentials.form.components.ExpirationDatePickerDialog
 import com.pablogv63.quicklock.ui.credentials.form.components.Field
 import com.pablogv63.quicklock.ui.destinations.GeneratorScreenDestination
@@ -34,6 +33,8 @@ import com.pablogv63.quicklock.ui.navigation.QuickLockNavigationBar
 import com.pablogv63.quicklock.ui.tools.AppPaddingValues
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.result.NavResult
+import com.ramcosta.composedestinations.result.ResultRecipient
 import org.koin.androidx.compose.getViewModel
 
 @ExperimentalMaterial3Api
@@ -43,8 +44,28 @@ import org.koin.androidx.compose.getViewModel
 @Composable
 fun AddScreen(
     viewModel: AddViewModel = getViewModel(),
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    resultRecipient: ResultRecipient<GeneratorScreenDestination,String>
 ) {
+    // Update password from Generator view
+    resultRecipient.onNavResult { result ->
+        when (result) {
+            is NavResult.Canceled -> {
+                // Cancelled (no value)
+                // In this case: do nothing
+            }
+            is NavResult.Value -> {
+                // Update password and repeated password field
+                viewModel.onEvent(FormEvent.PasswordChanged(result.value))
+                viewModel.onEvent(FormEvent.RepeatedPasswordChanged(
+                    password = result.value,
+                    repeatedPassword = result.value
+                ))
+            }
+        }
+    }
+
+
     val formState = viewModel.formState
     val addState = viewModel.addState
     val context = LocalContext.current
@@ -88,7 +109,9 @@ fun AddScreen(
             innerPadding = innerPadding,
             context = context,
             navigateToGenerator = {
-                navigator.navigate(GeneratorScreenDestination(fromCredentialView = true))
+                navigator.navigate(GeneratorScreenDestination(
+                    fromCredentialView = true,
+                ))
             }
         )
     }
@@ -186,7 +209,7 @@ fun AddScreenContent(
                             )
                         }
                     },
-                    showAsPassword = showAsPassword
+                    showAsPassword = showRepeatedAsPassword
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -219,11 +242,12 @@ fun AddScreenContent(
         )
         Spacer(modifier = Modifier.height(16.dp))
         // Category
-        CategoryDropdownMenu(
-            categoryName = formState.category,
-            onValueChange = { viewModel.onEvent(FormEvent.CategoryChanged(it)) },
+        CategoryChipList(
             categories = formState.categories,
-            onDropdownMenuClick = { viewModel.onEvent(FormEvent.CategoryChanged(it)) }
+            selectedCategories = formState.selectedCategories,
+            onChipClick = { viewModel.onEvent(FormEvent.CategorySelected(it)) },
+            onNewCategory = { name, category -> viewModel.onEvent(FormEvent.NewCategory(name,category)) },
+            onRemoveCategoryClick = { viewModel.onEvent(FormEvent.CategoryRemoved(it)) }
         )
     }
 }
