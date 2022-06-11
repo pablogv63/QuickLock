@@ -5,7 +5,19 @@ plugins {
     id 'com.google.devtools.ksp' version '1.6.21-1.0.5'
 }
 
+def signingConfigFile = rootProject.file("signingConfig.properties")
+def signingConfigProperties = new Properties()
+signingConfigProperties.load(new FileInputStream(signingConfigFile))
+
 android {
+    signingConfigs {
+        release {
+            storeFile file(signingConfigProperties["STORE_FILE_PATH"])
+            storePassword signingConfigProperties["STORE_PASSWORD"]
+            keyAlias signingConfigProperties["KEY_ALIAS"]
+            keyPassword signingConfigProperties["KEY_PASSWORD"]
+        }
+    }
     compileSdk 32
 
     defaultConfig {
@@ -19,12 +31,15 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+        signingConfig signingConfigs.release
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -61,13 +76,17 @@ dependencies {
     /* General app dependencies */
     implementation "androidx.core:core-ktx:$core_ktx_version"
     implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.material3:material3:$material3_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_runtime_ktx_version"
     implementation "androidx.activity:activity-compose:$activity_compose_version"
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+
+    /* Material 3 */
+    implementation "androidx.compose.material3:material3:$material3_version"
+    implementation "androidx.compose.material3:material3-window-size-class:1.0.0-alpha13"
+    implementation "com.google.accompanist:accompanist-flowlayout:0.24.8-beta"
 
     /* Extended material icons */
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
@@ -114,4 +133,10 @@ dependencies {
 
     /* GSON */
     implementation "com.google.code.gson:gson:$gson_version"
+
+    /* Color Picker */
+    implementation 'com.godaddy.android.colorpicker:compose-color-picker:0.4.2'
+
+    // with Android ColorInt extensions
+    implementation 'com.godaddy.android.colorpicker:compose-color-picker-android:0.4.2'
 }
