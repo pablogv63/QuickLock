@@ -24,7 +24,7 @@
     <string name="field_repeatPassword_label">Repeat password</string>
     <string name="field_expirationDate_label">Expiration Date</string>
     <string name="field_optional">*Optional</string>
-    <string name="field_expirationDate_pickDate">Pick date</string>
+    <string name="field_expirationDate_pickDate">Pick a date</string>
     <string name="field_categories_label">Categories</string>
     <string name="field_categories_empty">None</string>
     <string name="field_expirationDate_empty">None</string>
@@ -32,6 +32,7 @@
     <string name="field_lastModified_label">Last modified</string>
     <string name="field_lastAccessed_label">Last access</string>
     <string name="field_category_label">Category</string>
+    <string name="field_color_label">Color</string>
 
     <!-- Copy actions -->
     <string name="action_copy_username">Copy username</string>
@@ -46,7 +47,7 @@
     <string name="search_bar_clear">Clear</string>
     <string name="search_noMatches">No matches found</string>
     <string name="search_title">Search</string>
-    <string name="search_bar_placeholder">Search...</string>
+    <string name="search_bar_placeholder">Search…</string>
 
     <!-- Order -->
     <string name="order_orderBy">Order by</string>
@@ -76,5 +77,10 @@
     <string name="settingsScreen_loadDatabase_json_title">Load database</string>
     <string name="settingsScreen_loadDatabase_json_summary">Load database from a JSON file</string>
 
+    <!-- Dialog -->
+    <string name="dialog_newCategory_title">New Category</string>
+    <string name="dialog_dismiss">Dismiss</string>
+    <string name="dialog_confirm">Confirm</string>
+    <string name="dialog_open">New</string>
 
 </resources>
