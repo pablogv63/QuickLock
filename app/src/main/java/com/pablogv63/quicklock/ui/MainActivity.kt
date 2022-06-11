@@ -16,22 +16,26 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContextCompat
 import com.pablogv63.quicklock.ui.navigation.QuickLockNavHost
 import com.pablogv63.quicklock.ui.theme.QuickLockTheme
 import org.koin.androidx.compose.getViewModel
 
+@ExperimentalMaterial3Api
+@ExperimentalAnimationApi
+@ExperimentalComposeUiApi
 class MainActivity : ComponentActivity() {
 
     lateinit var mainViewModel: MainViewModel
 
-    @ExperimentalMaterial3Api
-    @ExperimentalAnimationApi
-    @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             QuickLockTheme {
+                // Change status bar color
+                this.window.statusBarColor = MaterialTheme.colorScheme.inverseSurface.toArgb()
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize()
