@@ -65,6 +65,9 @@ object FileUtils {
         }
     }
 
+    /**
+     * TODO: Return exception summaries as alerts
+     */
     fun loadFromFile(uri: Uri, contentResolver: ContentResolver): String? {
         try {
             contentResolver.openFileDescriptor(uri, "r")?.use { parcelFileDescriptor ->

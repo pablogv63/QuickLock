@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.*
@@ -172,16 +173,29 @@ fun EditButton(
         contentAlignment = Alignment.BottomEnd
     ) {
         IconButton(onClick = onItemClick) {
-            Icon(imageVector = Icons.Outlined.Edit, contentDescription = stringResource(id = R.string.editScreen_topAppBar_title))
+            Icon(imageVector = Icons.Filled.Edit, contentDescription = stringResource(id = R.string.editScreen_topAppBar_title))
         }
     }
 }
 
+@ExperimentalMaterial3Api
 @Composable
 fun CopyButton(
     text: String,
     onItemClick: () -> Unit
 ){
+    AssistChip(
+        onClick = onItemClick,
+        label = { Text(text = text) },
+        colors = AssistChipDefaults.assistChipColors(),
+        leadingIcon = {
+            Icon(
+                imageVector = Icons.Outlined.ContentCopy,
+                contentDescription = text
+            )
+        }
+    )
+    /*
     OutlinedButton(onClick = onItemClick) {
         Icon(
             imageVector = Icons.Outlined.ContentCopy,
@@ -191,7 +205,7 @@ fun CopyButton(
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(text = text)
-    }
+    }*/
 }
 
 @ExperimentalComposeUiApi

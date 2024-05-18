@@ -60,6 +60,7 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    namespace 'com.pablogv63.quicklock'
 
     // Compose Destinations
     applicationVariants.all { variant ->
@@ -86,7 +87,10 @@ dependencies {
     /* Material 3 */
     implementation "androidx.compose.material3:material3:$material3_version"
     implementation "androidx.compose.material3:material3-window-size-class:1.0.0-alpha13"
+
+    /* Google Accompanist Extensions */
     implementation "com.google.accompanist:accompanist-flowlayout:0.24.8-beta"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.24.10-beta"
 
     /* Extended material icons */
     implementation "androidx.compose.material:material-icons-extended:$compose_version"

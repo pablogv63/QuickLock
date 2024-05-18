@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,9 +17,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.pablogv63.quicklock.ui.navigation.QuickLockNavHost
 import com.pablogv63.quicklock.ui.theme.QuickLockTheme
 import org.koin.androidx.compose.getViewModel
@@ -34,8 +37,24 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             QuickLockTheme {
-                // Change status bar color
-                this.window.statusBarColor = MaterialTheme.colorScheme.inverseSurface.toArgb()
+                // Change status bar and navigation bar colors
+                // https://google.github.io/accompanist/systemuicontroller/
+                val systemUiController = rememberSystemUiController()
+                val useDarkIcons = !isSystemInDarkTheme()
+                val statusBarColor = MaterialTheme.colorScheme.background
+                val navigationBarColor = MaterialTheme.colorScheme.surface
+
+                SideEffect {
+                    systemUiController.setStatusBarColor(
+                        color = statusBarColor,
+                        darkIcons = useDarkIcons
+                    )
+                    systemUiController.setNavigationBarColor(
+                        color = navigationBarColor,
+                        darkIcons = useDarkIcons
+                    )
+                }
+
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize()
